@@ -4,6 +4,17 @@ var chalk = require('chalk');
 var yosay = require('yosay');
 var path = require("path");
 
+function isValidProjectName(value) {
+
+    var myRe = /[^a-zA-Z0-9_]/g;
+    if (myRe.test(value)) {
+    //if (value !== 'hi') {
+        return "Invalid Project Name (use only letters, numbers and _)";
+    } else {
+        return true;
+    }
+};
+
 module.exports = Generator.extend({
 
     constructor: function () {
@@ -306,7 +317,10 @@ module.exports = Generator.extend({
                 type: 'input',
                 name: 'projectName',
                 message: 'What\'s the name of your project',
-                default: ''
+                default: 'NewProject',
+                validate: function(value) {
+                    return isValidProjectName(value)
+                }
             }]).then((answers) => {
                 //this.log('Choose only one.... (projectName)....: ', answers.projectName);
 
@@ -327,7 +341,10 @@ module.exports = Generator.extend({
                 type: 'input',
                 name: 'projectName',
                 message: 'What\'s the name of your project',
-                default: ''
+                default: 'NewProject',
+                validate: function(value) {
+                    return isValidProjectName(value)
+                }
             },{
                 type: 'input',
                 name: 'projectPackageDescription',
@@ -344,7 +361,7 @@ module.exports = Generator.extend({
                 name: 'projectPackageBuildControl',
                 message: 'Choose the Build Control',
                 choices: ['Rebuild as Needed', 'Explicit Rebuild'],
-                default: 'Runtime'
+                default: 'Rebuild as Needed'
             },{
                 type: 'input',
                 name: 'projectPackageRequires',
@@ -352,13 +369,13 @@ module.exports = Generator.extend({
                 default: 'vcl,designide'
             }]).then((answers) => {
                 //this.log('Choose only one.... (projectApplicationType)....: ', answers.projectApplicationType);
-                this.configOnConstructor.projectPackageName = answers.projectPackageName;
+                this.configOnConstructor.projectName = answers.projectName;
                 this.configOnConstructor.projectPackageDescription = answers.projectPackageDescription;
                 this.configOnConstructor.projectPackageUsageOptions = answers.projectPackageUsageOptions;
                 this.configOnConstructor.projectPackageBuildControl = answers.projectPackageBuildControl;
                 this.configOnConstructor.projectPackageRequires = answers.projectPackageRequires;
 
-                this.log(this.configOnConstructor.projectPackageName);
+                this.log(this.configOnConstructor.projectName);
                 this.log(this.configOnConstructor.projectPackageDescription);
                 this.log(this.configOnConstructor.projectPackageUsageOptions);
                 this.log(this.configOnConstructor.projectPackageBuildControl);
@@ -419,7 +436,10 @@ module.exports = Generator.extend({
                 type: 'input',
                 name: 'projectName',
                 message: 'What\'s the name of your project',
-                default: ''
+                default: 'NewProjectTests',
+                validate: function(value) {
+                    return isValidProjectName(value)
+                }
             }]).then((answers) => {
                 //this.log('Choose only one.... (projectName)....: ', answers.projectName);
 
@@ -452,6 +472,9 @@ module.exports = Generator.extend({
         this.log('configOnConstructor.projectPackageRequires: ' + this.configOnConstructor.projectPackageRequires);
         this.log('configOnConstructor.projectUnitTestType: ' + this.configOnConstructor.projectUnitTestType);
         this.log('configOnConstructor.projectUnitTestRunnerType: ' + this.configOnConstructor.projectUnitTestRunnerType);
+
+        this.configOnConstructor.projectNameWithExtension = this.configOnConstructor.projectName +
+          (this.configOnConstructor.projectType === 'Package' ? '.dpk' : '.dpr');
 
 
         // this.log('writing:....')
@@ -547,22 +570,13 @@ module.exports = Generator.extend({
         //     this.spawnCommand('git', ['init', '--quiet']);
         // }
         this.log('');
-        //this.log('Your project ' + this.projectConfig.projectName + ' has been created!');
+        this.log('Your project ' + this.configOnConstructor.projectName + ' has been created!');
         this.log('');
         this.log('To start editing with Delphi, use the following commands:');
         this.log('');
-        //this.log('     cd ' + this.projectConfig.projectName);
-        this.log('     bds .');
+        this.log('     cd ' + this.configOnConstructor.projectName);
+        this.log('     bds ' + this.configOnConstructor.projectNameWithExtension);
         this.log('');
-        this.log('Open vsc-project-quickstart.md inside the new project for further instructions');
-        this.log('on how to modify, test and publish your project.');
-        this.log('');
-
-        // if (this.projectConfig.type === 'ext-projectpack') {
-        //     this.log(chalk.yellow('Please review the "projectDependencies" in the "package.json" before publishing the project pack.'));
-        //     this.log('');
-        // }
-
         this.log('For more information, also visit http://www.github.com/alefragnani/generator-delphi and follow us @alefragnani.');
         this.log('\r\n');
     }
