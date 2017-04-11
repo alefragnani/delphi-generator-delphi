@@ -480,24 +480,46 @@ module.exports = Generator.extend({
         // this.log('writing:....')
         // this.sourceRoot(path.join(__dirname, './templates/' + this.projectConfig.type));
 
-        // switch (this.projectConfig.type) {
-        //     case 'console':
-        //         this._writingConsole();
-        //         break;
-        //     case 'vcl-forms':
-        //         this._writingVclForms();
-        //         break;
-        //     case 'package':
-        //         this._writingPackage();
-        //         break;
-        //     default:
-        //         //unknown project type
-        //         break;
-        // }
+        switch (this.configOnConstructor.projectType) {
+            case 'Application':
+                switch (this.configOnConstructor.projectApplicationType) {
+                    case 'Console':
+                        this._writingApplicationConsole();
+                        break;
+                    case 'VCL Forms':
+                        this._writingApplicationVCLForms();
+                        break;
+                    case 'Firemonkey':
+                        this._writingApplicationFiremonkey();
+                        break;
+                    default:
+                        //unknown project type
+                        break;                          
+                }
+                break;
+            case 'Package':
+                this._writingPackage();
+                break;
+            case 'Unit Test':
+                switch (this.configOnConstructor.projectUnitTestType) {
+                    case 'Console':
+                        this._writingUnitTestConsole();
+                        break;
+                    case 'GUI':
+                        this._writingUnitTestGUI();
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            default:
+                //unknown project type
+                break;
+        }
     },
 
     // Write Console App
-    _writingConsole: function () {
+    _writingApplicationConsole: function () {
 
         var context = this;
 
@@ -524,23 +546,110 @@ module.exports = Generator.extend({
 
         var context = this;
 
-        this.log('_writingPackage ' + context.projectConfig.projectName);
-        this.log('_writingPackage ' + this.projectConfig.projectName);
+        this.log('_writingPackage ' + context.configOnConstructor.projectName);
+        this.log('_writingPackage ' + this.configOnConstructor.projectName);
 
-        this.log('from: ' + path.join(context.projectConfig.type, 'Package.dpk'));
-        this.log('to: ' + path.join(context.projectConfig.projectName, 'Package.dpk'));
-
+        // this.log('from: ' + path.join(context.configOnConstructor.type, 'Package.dpk'));
+        // this.log('to: ' + path.join(context.configOnConstructor.projectName, 'Package.dpk'));
+        
+        function translateUsageOptions(usageOptions, dpk) {
+            if (dpk) {
+                switch (usageOptions) {
+                    case 'Runtime':
+                        return '{$RUNONLY}'; 
+                        break;
+                    case 'Designtime':
+                        return '{$DESIGNONLY}';
+                        break;                
+                    default:
+                        return '';
+                        break;
+                }
+                // if (usageOptions === 'Runtime') {
+                //     return '{$RUNONLY}'
+                // } else {
+                //     return '{$DESIGNONLY}'
+                // }
+            } else {
+                switch (usageOptions) {
+                    case 'Runtime':
+                        return '<RuntimeOnlyPackage>true</RuntimeOnlyPackage>'; 
+                        break;
+                    case 'Designtime':
+                        return '<DesignOnlyPackage>true</DesignOnlyPackage>';
+                        break;                
+                    default:
+                        return '';
+                        break;
+                }                
+                // if (usageOptions === 'Runtime') {
+                //     return '<RuntimeOnlyPackage>true</RuntimeOnlyPackage>'
+                // } else {
+                //     return '<DesignOnlyPackage>true</DesignOnlyPackage>'
+                // }
+            }
+        }
+        
+        function translateBuildControl(buildControl, dpk) {
+            if (dpk) {
+                if (buildControl === 'Rebuild as Needed') {
+                    return '{$IMPLICITBUILD ON}'
+                } else {
+                    return '{$IMPLICITBUILD OFF}'
+                }
+            } else {
+                if (buildControl === 'Rebuild as Needed') {
+                    return ''
+                } else {
+                    return '\<DCC_OutputNeverBuildDcps\>true\</DCC_OutputNeverBuildDcps\>'
+                }
+            }
+        }
+        
         this.fs.copyTpl(
-            this.templatePath('Package.dpk'),
-            this.destinationPath(path.join(context.projectConfig.projectName, context.projectConfig.projectName + '.dpk')),
-            { name: context.projectConfig.projectName }
+            this.templatePath('package\\Package.dpk'),
+            this.destinationPath(path.join(context.configOnConstructor.projectName, context.configOnConstructor.projectName + '.dpk')),
+            { name: context.configOnConstructor.projectName,
+            description: context.configOnConstructor.projectPackageDescription,
+            usageoptions: translateUsageOptions(context.configOnConstructor.projectPackageUsageOptions, true),
+            buildcontrol: translateBuildControl(context.configOnConstructor.projectPackageBuildControl, true) }
         );
         this.fs.copyTpl(
-            this.templatePath('Package.dproj'),
-            this.destinationPath(path.join(context.projectConfig.projectName, context.projectConfig.projectName + '.dproj')),
-            { name: context.projectConfig.projectName }
+            this.templatePath('package\\Package.dproj'),
+            this.destinationPath(path.join(context.configOnConstructor.projectName, context.configOnConstructor.projectName + '.dproj')),
+            { name: context.configOnConstructor.projectName,
+            description: context.configOnConstructor.projectPackageDescription,
+            usageoptions: translateUsageOptions(context.configOnConstructor.projectPackageUsageOptions, false),
+            buildcontrol: translateBuildControl(context.configOnConstructor.projectPackageBuildControl, false) }
         );
     },
+
+    _writingUnitTestConsole: function () {
+
+        var context = this;
+
+        // this.log('_writingUnitTestConsole ' + context.configOnConstructor.projectName);
+        // this.log('_writingUnitTestConsole ' + this.configOnConstructor.projectName);
+
+        // this.log('from: ' + path.join(context.configOnConstructor.projectUnitTestType, 'ConsoleApp.dpr'));
+        // this.log('from: ' + path.join('unit_test\\console', 'ConsoleApp.dpr'));
+        // this.log('to: ' + path.join(context.configOnConstructor.projectName, 'ConsoleApp.dpr'));
+
+        this.fs.copyTpl(
+            this.templatePath('unit_test\\console\\ConsoleApp.dpr'),
+            this.destinationPath(path.join(context.configOnConstructor.projectName + 'Tests', context.configOnConstructor.projectName + 'Tests.dpr')),
+            { name: context.configOnConstructor.projectName, 
+            projectUnitTestRunnerType: context.configOnConstructor.projectUnitTestRunnerType }
+        );
+        this.fs.copyTpl(
+            this.templatePath('unit_test\\console\\ConsoleApp.dproj'),
+            this.destinationPath(path.join(context.configOnConstructor.projectName + 'Tests', context.configOnConstructor.projectName + 'Tests.dproj')),
+            { name: context.configOnConstructor.projectName, 
+            projectUnitTestRunnerType: context.configOnConstructor.projectUnitTestRunnerType }
+        );
+    },
+
+    
 
 
     // writing: function () {
