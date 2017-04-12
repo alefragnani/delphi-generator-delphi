@@ -250,7 +250,7 @@ module.exports = Generator.extend({
                 type: 'list',
                 name: 'projectApplicationType',
                 message: 'Choose the Application Type',
-                choices: ['Console', 'VCL Forms', 'Firemonkey'],
+                choices: ['Console', 'VCL Forms'/*, 'Firemonkey'*/],
                 default: 'Console'
             }]).then((answers) => {
                 //this.log('Choose only one.... (projectApplicationType)....: ', answers.projectApplicationType);
@@ -552,15 +552,38 @@ module.exports = Generator.extend({
         this.log('from: ' + path.join(context.configOnConstructor.projectType, 'VCLFormsApp.dpr'));
         this.log('to: ' + path.join(context.configOnConstructor.projectName, 'VCLFormsApp.dpr'));
 
+        function translateVCLStyleActive(active) {
+            if (active) {
+                return ", Vcl.Themes, Vcl.Styles"
+            } else {
+                return "";
+            }
+        }
+        
+        function translateVCLStyleSelected(selected, dpr) {
+            if (!selected) {
+                return "";
+            } else {
+                if (dpr) {
+                    return "TStyleManager.TrySetStyle(\'" + selected + "\');";
+                } else {
+                    return "<Custom_Styles>" + selected + "|VCLSTYLE|$(BDSCOMMONDIR)\\Styles\\" + selected + ".vsf</Custom_Styles>";
+                }
+            }
+        }
+
         this.fs.copyTpl(
             this.templatePath('application\\vcl\\VCLFormsApp.dpr'),
             this.destinationPath(path.join(context.configOnConstructor.projectName, context.configOnConstructor.projectName + '.dpr')),
-            { name: context.configOnConstructor.projectName }
+            { name: context.configOnConstructor.projectName,
+            vclstyleactive: translateVCLStyleActive(context.configOnConstructor.projectApplicationVCLStylesActive),
+            vclstyleselected: translateVCLStyleSelected(context.configOnConstructor.projectApplicationVCLSylesSelected, true)}
         );
         this.fs.copyTpl(
             this.templatePath('application\\vcl\\VCLFormsApp.dproj'),
             this.destinationPath(path.join(context.configOnConstructor.projectName, context.configOnConstructor.projectName + '.dproj')),
-            { name: context.configOnConstructor.projectName }
+            { name: context.configOnConstructor.projectName,
+            vclstyleselected: translateVCLStyleSelected(context.configOnConstructor.projectApplicationVCLSylesSelected, false)}
         );
         this.fs.copyTpl(
             this.templatePath('application\\vcl\\uFmMain.pas'),

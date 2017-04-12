@@ -54,6 +54,7 @@
         <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
         <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
         <SanitizedProjectName><%= name %></SanitizedProjectName>
+        <%- vclstyleselected %>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_UsePackage>rtl;fmxase;ObjectDebugger;vcl;CustomIPTransport;vclactnband;vcldsnap;IndyCore;IndySystem;vclx;bindcomp;tethering;svnui;appanalytics;dsnap;bindcompvcl;vclimg;vcltouch;VclSmp;vcldb;bindcompfmx;svn;vclie;bindengine;dbrtl;IndyProtocols;fmx;fmxdae;xmlrtl;fmxobj;vclwinx;$(DCC_UsePackage)</DCC_UsePackage>
