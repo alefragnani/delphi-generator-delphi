@@ -232,7 +232,7 @@ module.exports = Generator.extend({
                 type: 'list',
                 name: 'projectType',
                 message: 'Choose the Project Type',
-                choices: ['Application', 'Package', 'Unit Test', 'OTA'],
+                choices: ['Application', 'Package', 'Unit Test'/*, 'OTA'*/],
                 default: 'Application'
             }]).then((answers) => {
                 this.configOnConstructor.projectType = answers.projectType;
@@ -523,21 +523,54 @@ module.exports = Generator.extend({
 
         var context = this;
 
-        this.log('_writingConsole ' + context.projectConfig.projectName);
-        this.log('_writingConsole ' + this.projectConfig.projectName);
+        this.log('_writingConsole ' + context.configOnConstructor.projectName);
+        this.log('_writingConsole ' + this.configOnConstructor.projectName);
 
-        this.log('from: ' + path.join(context.projectConfig.type, 'ConsoleApp.dpr'));
-        this.log('to: ' + path.join(context.projectConfig.projectName, 'ConsoleApp.dpr'));
+        this.log('from: ' + path.join(context.configOnConstructor.projectType, 'ConsoleApp.dpr'));
+        this.log('to: ' + path.join(context.configOnConstructor.projectName, 'ConsoleApp.dpr'));
 
         this.fs.copyTpl(
-            this.templatePath('ConsoleApp.dpr'),
-            this.destinationPath(path.join(context.projectConfig.projectName, context.projectConfig.projectName + '.dpr')),
-            { name: context.projectConfig.projectName }
+            this.templatePath('application\\console\\ConsoleApp.dpr'),
+            this.destinationPath(path.join(context.configOnConstructor.projectName, context.configOnConstructor.projectName + '.dpr')),
+            { name: context.configOnConstructor.projectName }
         );
         this.fs.copyTpl(
-            this.templatePath('ConsoleApp.dproj'),
-            this.destinationPath(path.join(context.projectConfig.projectName, context.projectConfig.projectName + '.dproj')),
-            { name: context.projectConfig.projectName }
+            this.templatePath('application\\console\\ConsoleApp.dproj'),
+            this.destinationPath(path.join(context.configOnConstructor.projectName, context.configOnConstructor.projectName + '.dproj')),
+            { name: context.configOnConstructor.projectName }
+        );
+    },
+
+    // Write Console App
+    _writingApplicationVCLForms: function () {
+
+        var context = this;
+
+        this.log('_writingVCLForms ' + context.configOnConstructor.projectName);
+        this.log('_writingVCLForms ' + this.configOnConstructor.projectName);
+
+        this.log('from: ' + path.join(context.configOnConstructor.projectType, 'VCLFormsApp.dpr'));
+        this.log('to: ' + path.join(context.configOnConstructor.projectName, 'VCLFormsApp.dpr'));
+
+        this.fs.copyTpl(
+            this.templatePath('application\\vcl\\VCLFormsApp.dpr'),
+            this.destinationPath(path.join(context.configOnConstructor.projectName, context.configOnConstructor.projectName + '.dpr')),
+            { name: context.configOnConstructor.projectName }
+        );
+        this.fs.copyTpl(
+            this.templatePath('application\\vcl\\VCLFormsApp.dproj'),
+            this.destinationPath(path.join(context.configOnConstructor.projectName, context.configOnConstructor.projectName + '.dproj')),
+            { name: context.configOnConstructor.projectName }
+        );
+        this.fs.copyTpl(
+            this.templatePath('application\\vcl\\uFmMain.pas'),
+            this.destinationPath(path.join(context.configOnConstructor.projectName, 'uFmMain.pas')),
+            { name: context.configOnConstructor.projectName }
+        );
+        this.fs.copyTpl(
+            this.templatePath('application\\vcl\\uFmMain.dfm'),
+            this.destinationPath(path.join(context.configOnConstructor.projectName, 'uFmMain.dfm')),
+            { name: context.configOnConstructor.projectName }
         );
     },
 
@@ -549,9 +582,6 @@ module.exports = Generator.extend({
         this.log('_writingPackage ' + context.configOnConstructor.projectName);
         this.log('_writingPackage ' + this.configOnConstructor.projectName);
 
-        // this.log('from: ' + path.join(context.configOnConstructor.type, 'Package.dpk'));
-        // this.log('to: ' + path.join(context.configOnConstructor.projectName, 'Package.dpk'));
-        
         function translateUsageOptions(usageOptions, dpk) {
             if (dpk) {
                 switch (usageOptions) {
@@ -565,11 +595,6 @@ module.exports = Generator.extend({
                         return '';
                         break;
                 }
-                // if (usageOptions === 'Runtime') {
-                //     return '{$RUNONLY}'
-                // } else {
-                //     return '{$DESIGNONLY}'
-                // }
             } else {
                 switch (usageOptions) {
                     case 'Runtime':
@@ -582,11 +607,6 @@ module.exports = Generator.extend({
                         return '';
                         break;
                 }                
-                // if (usageOptions === 'Runtime') {
-                //     return '<RuntimeOnlyPackage>true</RuntimeOnlyPackage>'
-                // } else {
-                //     return '<DesignOnlyPackage>true</DesignOnlyPackage>'
-                // }
             }
         }
         
