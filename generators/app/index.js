@@ -298,7 +298,13 @@ module.exports = Generator.extend({
                 type: 'list',
                 name: 'projectApplicationVCLSylesSelected',
                 message: 'Choose the Application Type',
-                choices: ['Amakrits', 'AmethystKamri', 'AquaGraphite', 'AquaLightSlate', 'Auric', 'Carbon', 'CharcoalDarkSlate', 'CobaltXEMedia', 'CyanDusk', 'CyanNight', 'EmeraldLightSlate', 'Glossy', 'Glow', 'GoldenGraphite', 'IcebergClassico', 'LavenderClassico', 'Light', 'Luna', 'maisum', 'MetropolisUIBlack', 'MetropolisUIBlue', 'MetropolisUIDark', 'MetropolisUIGreen', 'MPSC', 'Obsidian', 'OnyxBlue', 'RubyGraphite', 'SapphireKamri', 'Silver', 'Sky', 'SlateClassico', 'SmokeyQuartzKamri', 'TabletDark', 'TabletLight', 'TurquoiseGray', 'Windows10', 'Windows10Blue', 'Windows10Dark'],
+                choices: ['Amakrits', 'Amethyst Kamri', 'Aqua Graphite', 'Aqua Light Slate', 'Auric', 'Carbon', 
+                    'Charcoal Dark Slate', 'Cobalt XEMedia', 'Cyan Dusk', 'Cyan Night', 'Emerald Light Slate', 
+                    'Glossy', 'Glow', 'Golden Graphite', 'Iceberg Classico', 'Lavender Classico', 'Light', 'Luna', 
+                    'Metropolis UI Black', 'Metropolis UI Blue', 'Metropolis UI Dark', 'Metropolis UI Green', 
+                    'Obsidian', 'Onyx Blue', 'Ruby Graphite', 'Sapphire Kamri', 'Silver', 'Sky', 'Slate Classico', 
+                    'Smokey Quartz Kamri', 'Tablet Dark', 'Tablet Light', 'Turquoise Gray', 'Windows10', 
+                    'Windows10 Blue', 'Windows10 Dark'],
                 default: 'Windows10'
             }]).then((answers) => {
                 //this.log('Choose only one.... (projectApplicationVCLSylesSelected)....: ', answers.projectApplicationVCLSylesSelected);
@@ -552,6 +558,10 @@ module.exports = Generator.extend({
         this.log('from: ' + path.join(context.configOnConstructor.projectType, 'VCLFormsApp.dpr'));
         this.log('to: ' + path.join(context.configOnConstructor.projectName, 'VCLFormsApp.dpr'));
 
+        function trimWhitespaces(text) {
+            return text.replace(/\s/g, "");
+        }
+
         function translateVCLStyleActive(active) {
             if (active) {
                 return ", Vcl.Themes, Vcl.Styles"
@@ -567,7 +577,7 @@ module.exports = Generator.extend({
                 if (dpr) {
                     return "TStyleManager.TrySetStyle(\'" + selected + "\');";
                 } else {
-                    return "<Custom_Styles>" + selected + "|VCLSTYLE|$(BDSCOMMONDIR)\\Styles\\" + selected + ".vsf</Custom_Styles>";
+                    return "<Custom_Styles>&quot;" + selected + "|VCLSTYLE|$(BDSCOMMONDIR)\\Styles\\" + trimWhitespaces(selected) + ".vsf&quot;</Custom_Styles>";
                 }
             }
         }
