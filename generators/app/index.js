@@ -4,6 +4,13 @@ var chalk = require('chalk');
 var yosay = require('yosay');
 var path = require("path");
 
+var DEBUG_MODE = false;
+function debugLog(athis, message) {
+    if (DEBUG_MODE) {
+        athis.log(message)
+    }
+}
+
 function isValidProjectName(value) {
 
     var myRe = /[^a-zA-Z0-9_]/g;
@@ -33,114 +40,6 @@ module.exports = Generator.extend({
     },
 
     prompting: {
-
-        // askForType: function() {
-        //         var generator = this;
-        //         if (generator.projectType) {
-        //             var projectTypes = ['console', 'vcl-forms', 'package'];
-        //             if (projectTypes.indexOf(generator.projectType) !== -1) {
-        //                 generator.projectConfig.type = generator.projectType;
-        //             } else {
-        //                 generator.env.error("Invalid project type: " + generator.projectType + '. Possible types are :' + projectTypes.join(', '));
-        //             }
-        //             return Promise.resolve();
-        //         }
-
-        //         return generator.prompt({
-        //             type: 'list',
-        //             name: 'type',
-        //             message: 'What type of project do you want to create?',
-        //             choices: [
-        //                 {
-        //                     name: 'Console',
-        //                     value: 'console'
-        //                 },
-        //                 {
-        //                     name: 'VCL Forms',
-        //                     value: 'vcl-forms'
-        //                 },
-        //                 {
-        //                     name: 'Package',
-        //                     value: 'package'
-        //                 },
-        //                 {
-        //                     name: 'Package (Run-Time)',
-        //                     value: 'package-run-time'
-        //                 },
-        //                 {
-        //                     name: 'Package (Design-Time)',
-        //                     value: 'package-design-time'
-        //                 },
-        //                 {
-        //                     name: 'DUnit (Console)',
-        //                     value: 'dunit-console'
-        //                 },
-        //                 {
-        //                     name: 'DUnit (GUI)',
-        //                     value: 'dunit-gui'
-        //                 },
-        //                 {
-        //                     name: 'OTA',
-        //                     value: 'ota'
-        //                 },
-        //                 {
-        //                     name: 'FMX Forms',
-        //                     value: 'fmx-forms'
-        //                 }
-        //             ]
-        //         }).then(function (typeAnswer) {
-        //             generator.projectConfig.type = typeAnswer.type;
-        //         });
-        // },
-
-        // // Ask for project name ("ProjectName.dproj")
-        // askForProjectName: function () {
-        //     var generator = this;
-        //     if (generator.projectName) {
-        //         generator.projectConfig.projectName = generator.projectName;
-        //         return;
-        //     }
-
-        //     return generator.prompt({
-        //         type: 'input',
-        //         name: 'projectName',
-        //         message: 'What\'s the name of your project?',
-        //         default: generator.projectConfig.projectName
-        //     }).then(function (projectNameAnswer) {
-        //         generator.projectConfig.projectName = projectNameAnswer.projectName;
-        //     });
-        // },
-
-        // askForPackageType: function() {
-        //     var done = this.async();
-        //     if (this.projectConfig.type !== 'package') {
-        //         done();
-        //         return;
-        //     }
-
-        //     var generator = this;
-        //     return generator.prompt({
-        //         type: 'list',
-        //         name: 'packageUsage',
-        //         message: 'What type of usage do you want for your package?',
-        //         choices: [
-        //             {
-        //                 name: 'Designtime only',
-        //                 value: 'dt'
-        //             },
-        //             {
-        //                 name: 'Runtime only',
-        //                 value: 'rt'
-        //             },
-        //             {
-        //                 name: 'Designtime and Runtime',
-        //                 value: 'dr'
-        //             }
-        //         ]
-        //     }).then(function (typeAnswer) {
-        //         generator.projectConfig.packageUsage = typeAnswer.packageUsage;
-        //     });
-        // },
 
         // askForGit: function () {
         //     var generator = this;
@@ -194,38 +93,6 @@ module.exports = Generator.extend({
         //     });
         // },
 
-        // askForPackageType: function () {
-        //     return this.prompt([{
-        //         type: 'input',
-        //         name: 'XpromptTypeInput',
-        //         message: 'askForPackageType: Your project name',
-        //         default: this.appname // Default to current folder name
-        //     }, {
-        //         type: 'list',
-        //         name: 'XpromptTypeList',
-        //         message: 'askForPackageType: Choose only one item from the list',
-        //         choices: ['First', 'Second', 'Third'],
-        //         default: 'First' // Default to the first one
-        //     }, {
-        //         type: 'checkbox',
-        //         name: 'XpromptTypeCheckbox',
-        //         message: 'askForPackageType: Select all items that apply',
-        //         choices: ['First Item', 'Second Item', 'Third Item', 'Fourth Item'],
-        //         default: '' // Default to no one
-        //     }, {
-        //         type: 'confirm',
-        //         name: 'askForPackageType: XpromptTypeConfirm',
-        //         message: 'Would you like to enable the Cool feature?'
-        //     }]).then((answers) => {
-        //         this.log('Your project name.. (XpromptTypeInput)...: ', answers.XpromptTypeInput);
-        //         this.log('Choose only one.... (XpromptTypeList)....: ', answers.XpromptTypeList);
-        //         this.log('Select all items... (XpromptTypeCheckbox): ', answers.XpromptTypeCheckbox);
-        //         this.log('Would you like..... (XpromptTypeConfirm).: ', answers.XpromptTypeConfirm);
-
-        //         this.configOnConstructor.name2 = answers.XpromptTypeInput;
-        //     });
-        // }
-
         askForProjectType: function () {
             
             return this.prompt([{
@@ -242,7 +109,7 @@ module.exports = Generator.extend({
         askForProjectApplicationType: function () {
 
             if (this.configOnConstructor.projectType !== 'Application') {
-                // this.log('left projectType');
+                // debugLog(this, 'left projectType');
                 return;
             }
 
@@ -261,11 +128,11 @@ module.exports = Generator.extend({
         askForProjectApplicationVCLStylesActive: function () {
 
             if (this.configOnConstructor.projectType !== 'Application') {
-                //this.log('left projectType');
+                //debugLog(this, 'left projectType');
                 return;
             }
             if (this.configOnConstructor.projectApplicationType !== 'VCL Forms') {
-                //this.log('left projectApplicationType');
+                //debugLog(this, 'left projectApplicationType');
                 return;
             }
 
@@ -282,15 +149,15 @@ module.exports = Generator.extend({
         askForProjectApplicationVCLSylesSelected: function () {
 
             if (this.configOnConstructor.projectType !== 'Application') {
-                this.log('left projectType !== Application');
+                debugLog(this, 'left projectType !== Application');
                 return;
             }
             if (this.configOnConstructor.projectApplicationType !== 'VCL Forms') {
-                this.log('left projectApplicationType !== VCL Forms');
+                debugLog(this, 'left projectApplicationType !== VCL Forms');
                 return;
             }
             if (!this.configOnConstructor.projectApplicationVCLStylesActive) {
-                this.log('left projectApplicationVCLStylesActive NOT');
+                debugLog(this, 'left projectApplicationVCLStylesActive NOT');
                 return;
             }
 
@@ -315,7 +182,7 @@ module.exports = Generator.extend({
         askForProjectName: function () {
 
             if (this.configOnConstructor.projectType !== 'Application') {
-                this.log('left projectType !== Application');
+                debugLog(this, 'left projectType !== Application');
                 return;
             }
 
@@ -339,7 +206,7 @@ module.exports = Generator.extend({
         askForProjectPackageDetails: function () {
 
             if (this.configOnConstructor.projectType !== 'Package') {
-                this.log('left projectType !== Package');
+                debugLog(this, 'left projectType !== Package');
                 return;
             }
 
@@ -381,11 +248,11 @@ module.exports = Generator.extend({
                 this.configOnConstructor.projectPackageBuildControl = answers.projectPackageBuildControl;
                 this.configOnConstructor.projectPackageRequires = answers.projectPackageRequires;
 
-                this.log(this.configOnConstructor.projectName);
-                this.log(this.configOnConstructor.projectPackageDescription);
-                this.log(this.configOnConstructor.projectPackageUsageOptions);
-                this.log(this.configOnConstructor.projectPackageBuildControl);
-                this.log(this.configOnConstructor.projectPackageRequires);
+                debugLog(this, this.configOnConstructor.projectName);
+                debugLog(this, this.configOnConstructor.projectPackageDescription);
+                debugLog(this, this.configOnConstructor.projectPackageUsageOptions);
+                debugLog(this, this.configOnConstructor.projectPackageBuildControl);
+                debugLog(this, this.configOnConstructor.projectPackageRequires);
             });
         },
 
@@ -396,7 +263,7 @@ module.exports = Generator.extend({
         askForProjectUnitTestType: function () {
 
             if (this.configOnConstructor.projectType !== 'Unit Test') {
-                // this.log('left projectType');
+                // debugLog(this, 'left projectType');
                 return;
             }
 
@@ -415,7 +282,7 @@ module.exports = Generator.extend({
         askForProjectUnitTestRunnerType: function () {
 
             if (this.configOnConstructor.projectUnitTestType !== 'Console') {
-                // this.log('left projectType');
+                // debugLog(this, 'left projectType');
                 return;
             }
 
@@ -434,7 +301,7 @@ module.exports = Generator.extend({
         askForProjectUnitTestName: function () {
 
             if (this.configOnConstructor.projectType !== 'Unit Test') {
-                this.log('left projectType !== Unit Test');
+                debugLog(this, 'left projectType !== Unit Test');
                 return;
             }
 
@@ -457,27 +324,25 @@ module.exports = Generator.extend({
 
     writing: function () {
 
+        // debugLog(this, 'configOnConstructor.name: ' + this.configOnConstructor.name);
+        // debugLog(this, 'configOnConstructor.name2: ' + this.configOnConstructor.name2);
 
-
-        // this.log('configOnConstructor.name: ' + this.configOnConstructor.name);
-        // this.log('configOnConstructor.name2: ' + this.configOnConstructor.name2);
-
-        // this.log('configOnConstructor.projectType: ' + this.configOnConstructor.projectType);
-        // this.log('configOnConstructor.projectApplicationType: ' + this.configOnConstructor.projectApplicationType);
+        // debugLog(this, 'configOnConstructor.projectType: ' + this.configOnConstructor.projectType);
+        // debugLog(this, 'configOnConstructor.projectApplicationType: ' + this.configOnConstructor.projectApplicationType);
 
         /////
-        this.log('configOnConstructor.projectType: ' + this.configOnConstructor.projectType);
-        this.log('configOnConstructor.projectName: ' + this.configOnConstructor.projectName);
-        this.log('configOnConstructor.projectApplicationType: ' + this.configOnConstructor.projectApplicationType);
-        this.log('configOnConstructor.projectApplicationVCLStylesActive: ' + this.configOnConstructor.projectApplicationVCLStylesActive);
-        this.log('configOnConstructor.projectApplicationVCLSylesSelected: ' + this.configOnConstructor.projectApplicationVCLSylesSelected);
-        this.log('configOnConstructor.projectPackageName: ' + this.configOnConstructor.projectPackageName);
-        this.log('configOnConstructor.projectPackageDescription: ' + this.configOnConstructor.projectPackageDescription);
-        this.log('configOnConstructor.projectPackageUsageOptions: ' + this.configOnConstructor.projectPackageUsageOptions);
-        this.log('configOnConstructor.projectPackageBuildControl: ' + this.configOnConstructor.projectPackageBuildControl);
-        this.log('configOnConstructor.projectPackageRequires: ' + this.configOnConstructor.projectPackageRequires);
-        this.log('configOnConstructor.projectUnitTestType: ' + this.configOnConstructor.projectUnitTestType);
-        this.log('configOnConstructor.projectUnitTestRunnerType: ' + this.configOnConstructor.projectUnitTestRunnerType);
+        debugLog(this, 'configOnConstructor.projectType: ' + this.configOnConstructor.projectType);
+        debugLog(this, 'configOnConstructor.projectName: ' + this.configOnConstructor.projectName);
+        debugLog(this, 'configOnConstructor.projectApplicationType: ' + this.configOnConstructor.projectApplicationType);
+        debugLog(this, 'configOnConstructor.projectApplicationVCLStylesActive: ' + this.configOnConstructor.projectApplicationVCLStylesActive);
+        debugLog(this, 'configOnConstructor.projectApplicationVCLSylesSelected: ' + this.configOnConstructor.projectApplicationVCLSylesSelected);
+        debugLog(this, 'configOnConstructor.projectPackageName: ' + this.configOnConstructor.projectPackageName);
+        debugLog(this, 'configOnConstructor.projectPackageDescription: ' + this.configOnConstructor.projectPackageDescription);
+        debugLog(this, 'configOnConstructor.projectPackageUsageOptions: ' + this.configOnConstructor.projectPackageUsageOptions);
+        debugLog(this, 'configOnConstructor.projectPackageBuildControl: ' + this.configOnConstructor.projectPackageBuildControl);
+        debugLog(this, 'configOnConstructor.projectPackageRequires: ' + this.configOnConstructor.projectPackageRequires);
+        debugLog(this, 'configOnConstructor.projectUnitTestType: ' + this.configOnConstructor.projectUnitTestType);
+        debugLog(this, 'configOnConstructor.projectUnitTestRunnerType: ' + this.configOnConstructor.projectUnitTestRunnerType);
 
         this.configOnConstructor.projectNameWithExtension = this.configOnConstructor.projectName +
           (this.configOnConstructor.projectType === 'Package' ? '.dpk' : '.dpr');
@@ -529,11 +394,11 @@ module.exports = Generator.extend({
 
         var context = this;
 
-        this.log('_writingConsole ' + context.configOnConstructor.projectName);
-        this.log('_writingConsole ' + this.configOnConstructor.projectName);
+        debugLog(this, '_writingConsole ' + context.configOnConstructor.projectName);
+        debugLog(this, '_writingConsole ' + this.configOnConstructor.projectName);
 
-        this.log('from: ' + path.join(context.configOnConstructor.projectType, 'ConsoleApp.dpr'));
-        this.log('to: ' + path.join(context.configOnConstructor.projectName, 'ConsoleApp.dpr'));
+        debugLog(this, 'from: ' + path.join(context.configOnConstructor.projectType, 'ConsoleApp.dpr'));
+        debugLog(this, 'to: ' + path.join(context.configOnConstructor.projectName, 'ConsoleApp.dpr'));
 
         this.fs.copyTpl(
             this.templatePath('application\\console\\ConsoleApp.dpr'),
@@ -552,11 +417,11 @@ module.exports = Generator.extend({
 
         var context = this;
 
-        this.log('_writingVCLForms ' + context.configOnConstructor.projectName);
-        this.log('_writingVCLForms ' + this.configOnConstructor.projectName);
+        debugLog(this, '_writingVCLForms ' + context.configOnConstructor.projectName);
+        debugLog(this, '_writingVCLForms ' + this.configOnConstructor.projectName);
 
-        this.log('from: ' + path.join(context.configOnConstructor.projectType, 'VCLFormsApp.dpr'));
-        this.log('to: ' + path.join(context.configOnConstructor.projectName, 'VCLFormsApp.dpr'));
+        debugLog(this, 'from: ' + path.join(context.configOnConstructor.projectType, 'VCLFormsApp.dpr'));
+        debugLog(this, 'to: ' + path.join(context.configOnConstructor.projectName, 'VCLFormsApp.dpr'));
 
         function trimWhitespaces(text) {
             return text.replace(/\s/g, "");
@@ -612,8 +477,8 @@ module.exports = Generator.extend({
 
         var context = this;
 
-        this.log('_writingPackage ' + context.configOnConstructor.projectName);
-        this.log('_writingPackage ' + this.configOnConstructor.projectName);
+        debugLog(this, '_writingPackage ' + context.configOnConstructor.projectName);
+        debugLog(this, '_writingPackage ' + this.configOnConstructor.projectName);
 
         function translateUsageOptions(usageOptions, dpk) {
             if (dpk) {
@@ -681,12 +546,12 @@ module.exports = Generator.extend({
 
         var context = this;
 
-        // this.log('_writingUnitTestConsole ' + context.configOnConstructor.projectName);
-        // this.log('_writingUnitTestConsole ' + this.configOnConstructor.projectName);
+        // debugLog(this, '_writingUnitTestConsole ' + context.configOnConstructor.projectName);
+        // debugLog(this, '_writingUnitTestConsole ' + this.configOnConstructor.projectName);
 
-        // this.log('from: ' + path.join(context.configOnConstructor.projectUnitTestType, 'ConsoleApp.dpr'));
-        // this.log('from: ' + path.join('unit_test\\console', 'ConsoleApp.dpr'));
-        // this.log('to: ' + path.join(context.configOnConstructor.projectName, 'ConsoleApp.dpr'));
+        // debugLog(this, 'from: ' + path.join(context.configOnConstructor.projectUnitTestType, 'ConsoleApp.dpr'));
+        // debugLog(this, 'from: ' + path.join('unit_test\\console', 'ConsoleApp.dpr'));
+        // debugLog(this, 'to: ' + path.join(context.configOnConstructor.projectName, 'ConsoleApp.dpr'));
 
         this.fs.copyTpl(
             this.templatePath('unit_test\\console\\ConsoleApp.dpr'),
@@ -702,7 +567,7 @@ module.exports = Generator.extend({
         );
     },
 
-    
+     
 
 
     // writing: function () {
@@ -712,16 +577,16 @@ module.exports = Generator.extend({
     //   );
 
     //   var generator = this;
-    //   this.log("projectType: " + generator.projectConfig.type);
-    //   this.log("projectName: " + generator.projectConfig.projectName);
+    //   debugLog(this, "projectType: " + generator.projectConfig.type);
+    //   debugLog(this, "projectName: " + generator.projectConfig.projectName);
     // },
 
     install: function () {
         //this.installDependencies();
         var generator = this;
-        this.log('installlll');
-        // this.log('Your project ' + generator.projectConfig.projectName + ' has been created!');
-        // this.log('Your project ' + this.projectConfig.projectName + ' has been created!');
+        debugLog(this, 'installlll');
+        // debugLog(this, 'Your project ' + generator.projectConfig.projectName + ' has been created!');
+        // debugLog(this, 'Your project ' + this.projectConfig.projectName + ' has been created!');
     },
 
     // End
