@@ -566,18 +566,23 @@ module.exports = Generator.extend({
         );
     },
 
+    // _writingUnitTestGUI: function () {
 
+    //     var context = this;
 
-    // writing: function () {
-    //   this.fs.copy(
-    //     this.templatePath('dummyfile.txt'),
-    //     this.destinationPath('dummyfile.txt')
-    //   );
-
-    //   var generator = this;
-    //   debugLog(this, "projectType: " + generator.projectConfig.type);
-    //   debugLog(this, "projectName: " + generator.projectConfig.projectName);
-    // },
+    //     this.fs.copyTpl(
+    //         this.templatePath('unit_test\\gui\\GUIApp.dpr'),
+    //         this.destinationPath(path.join(context.configOnConstructor.projectName + 'Tests', context.configOnConstructor.projectName + 'Tests.dpr')),
+    //         { name: context.configOnConstructor.projectName, 
+    //         projectUnitTestRunnerType: context.configOnConstructor.projectUnitTestRunnerType }
+    //     );
+    //     this.fs.copyTpl(
+    //         this.templatePath('unit_test\\gui\\GUIApp.dproj'),
+    //         this.destinationPath(path.join(context.configOnConstructor.projectName + 'Tests', context.configOnConstructor.projectName + 'Tests.dproj')),
+    //         { name: context.configOnConstructor.projectName, 
+    //         projectUnitTestRunnerType: context.configOnConstructor.projectUnitTestRunnerType }
+    //     );
+    // },   
 
     install: function () {
         //this.installDependencies();
@@ -597,14 +602,15 @@ module.exports = Generator.extend({
         }
 
         this.log('');
-        this.log('Your project ' + this.configOnConstructor.projectName + ' has been created!');
+        this.log('Your project ' + chalk.bold(this.configOnConstructor.projectName) + ' has been created!');
         this.log('');
-        this.log('To start editing with Delphi, use the following commands:');
+        this.log('To start editing with ' + chalk.bold('Delphi') + ', use the following commands:');
         this.log('');
-        this.log('     cd ' + this.configOnConstructor.projectName);
-        this.log('     bds ' + this.configOnConstructor.projectNameWithExtension);
+        this.log(chalk.cyan('     cd ' + this.configOnConstructor.projectName));
+        this.log(chalk.cyan('     bds ' + this.configOnConstructor.projectNameWithExtension));
         this.log('');
-        this.log('For more information, also visit http://www.github.com/alefragnani/generator-delphi and follow us @alefragnani.');
+        this.log('For more information, also visit ' + chalk.underline.blue('http://www.github.com/alefragnani/generator-delphi') + 
+          ' and follow us ' + chalk.underline.blue('@alefragnani') + '.');
         this.log('\r\n');
     }
 
