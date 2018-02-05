@@ -41,19 +41,6 @@ module.exports = Generator.extend({
 
     prompting: {
 
-        // askForGit: function () {
-        //     var generator = this;
-
-        //     return generator.prompt({
-        //         type: 'confirm',
-        //         name: 'gitInit',
-        //         message: 'Initialize a git repository?',
-        //         default: true
-        //     }).then(function (gitAnswer) {
-        //         generator.extensionConfig.gitInit = gitAnswer.gitInit;
-        //     });
-        // },
-
         //         askForType2: function () {
         //     return this.prompt([{
         //         type: 'input',
@@ -320,6 +307,18 @@ module.exports = Generator.extend({
             });
         },
 
+        askForGit: function () {
+
+            return this.prompt({
+                type: 'confirm',
+                name: 'gitInit',
+                message: 'Initialize a git repository?',
+                default: true
+            }).then((answers) => {
+                this.configOnConstructor.gitInit = answers.gitInit;
+            });
+        },
+    
     },
 
     writing: function () {
@@ -567,7 +566,6 @@ module.exports = Generator.extend({
         );
     },
 
-     
 
 
     // writing: function () {
@@ -584,7 +582,7 @@ module.exports = Generator.extend({
     install: function () {
         //this.installDependencies();
         var generator = this;
-        debugLog(this, 'installlll');
+        debugLog(this, 'install');
         // debugLog(this, 'Your project ' + generator.projectConfig.projectName + ' has been created!');
         // debugLog(this, 'Your project ' + this.projectConfig.projectName + ' has been created!');
     },
@@ -592,10 +590,12 @@ module.exports = Generator.extend({
     // End
     end: function () {
 
-        // // Git init
-        // if (this.projectConfig.gitInit) {
-        //     this.spawnCommand('git', ['init', '--quiet']);
-        // }
+        // Git init
+        if (this.configOnConstructor.gitInit) {
+            process.chdir(this.configOnConstructor.projectName);
+            this.spawnCommand('git', ['init', '--quiet']);
+        }
+
         this.log('');
         this.log('Your project ' + this.configOnConstructor.projectName + ' has been created!');
         this.log('');
