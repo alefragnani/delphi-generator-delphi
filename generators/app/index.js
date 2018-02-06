@@ -258,7 +258,7 @@ module.exports = Generator.extend({
                 type: 'list',
                 name: 'projectUnitTestType',
                 message: 'Choose the Unit Test Type',
-                choices: ['Console', 'GUI'],
+                choices: ['Console'/*, 'GUI'*/],
                 default: 'Console'
             }]).then((answers) => {
                 //this.log('Choose only one.... (projectApplicationType)....: ', answers.projectApplicationType);
@@ -344,6 +344,7 @@ module.exports = Generator.extend({
         debugLog(this, 'configOnConstructor.projectUnitTestRunnerType: ' + this.configOnConstructor.projectUnitTestRunnerType);
 
         this.configOnConstructor.projectNameWithExtension = this.configOnConstructor.projectName +
+          (this.configOnConstructor.projectType === 'Unit Test' ? 'Tests' : '') +
           (this.configOnConstructor.projectType === 'Package' ? '.dpk' : '.dpr');
 
 
@@ -564,6 +565,8 @@ module.exports = Generator.extend({
             { name: context.configOnConstructor.projectName, 
             projectUnitTestRunnerType: context.configOnConstructor.projectUnitTestRunnerType }
         );
+
+        this.configOnConstructor.projectName = context.configOnConstructor.projectName + 'Tests';
     },
 
     // _writingUnitTestGUI: function () {
@@ -597,6 +600,7 @@ module.exports = Generator.extend({
 
         // Git init
         if (this.configOnConstructor.gitInit) {
+            debugLog(this, 'git init: ' + this.configOnConstructor.projectName);
             process.chdir(this.configOnConstructor.projectName);
             this.spawnCommand('git', ['init', '--quiet']);
         }
