@@ -15,7 +15,7 @@ This generator will help you start with a range of **Delphi** projects, right fr
 * Make sure you have [node.js](https://nodejs.org/) and [Yeoman](http://yeoman.io) installed
 * Install the generator: 
 ```bash
-npm install -g generator-delphi`
+npm install -g generator-delphi
 ```
 * Run the generator: 
 ```bash
