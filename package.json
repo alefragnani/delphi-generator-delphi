@@ -1,12 +1,19 @@
 {
   "name": "generator-delphi",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Yeoman generator for Delphi projects",
-  "homepage": "https://github.com/alefragnani/generator-delphi",
+  "homepage": "https://github.com/alefragnani/delphi-generator-delphi",
   "author": {
     "name": "Alessandro Fragnani",
     "email": "alefragnani@hotmail.com",
     "url": "https://www.github.com/alefragnani"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alefragnani/delphi-generator-delphi"
+  },
+  "bugs": {
+    "url": "https://github.com/alefragnani/delphi-generator-delphi/issues"
   },
   "files": [
     "generators"
@@ -41,7 +48,6 @@
       "mocha": true
     }
   },
-  "repository": "alefragnani/generator-delphi",
   "scripts": {
     "prepublish": "gulp prepublish",
     "test": "gulp"

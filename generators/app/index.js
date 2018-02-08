@@ -613,7 +613,7 @@ module.exports = Generator.extend({
         this.log(chalk.cyan('     cd ' + this.configOnConstructor.projectName));
         this.log(chalk.cyan('     bds ' + this.configOnConstructor.projectNameWithExtension));
         this.log('');
-        this.log('For more information, also visit ' + chalk.underline.blue('http://www.github.com/alefragnani/generator-delphi') + 
+        this.log('For more information, also visit ' + chalk.underline.blue('http://www.github.com/alefragnani/vscode-generator-delphi') + 
           ' and follow us ' + chalk.underline.blue('@alefragnani') + '.');
         this.log('\r\n');
     }
