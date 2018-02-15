@@ -104,7 +104,7 @@ module.exports = Generator.extend({
                 type: 'list',
                 name: 'projectApplicationType',
                 message: 'Choose the Application Type',
-                choices: ['Console', 'VCL Forms'/*, 'Firemonkey'*/],
+                choices: ['Console', 'VCL Forms', 'FireMonkey'],
                 default: 'Console'
             }]).then((answers) => {
                 //this.log('Choose only one.... (projectApplicationType)....: ', answers.projectApplicationType);
@@ -360,8 +360,8 @@ module.exports = Generator.extend({
                     case 'VCL Forms':
                         this._writingApplicationVCLForms();
                         break;
-                    case 'Firemonkey':
-                        this._writingApplicationFiremonkey();
+                    case 'FireMonkey':
+                        this._writingApplicationFireMonkey();
                         break;
                     default:
                         //unknown project type
@@ -412,7 +412,7 @@ module.exports = Generator.extend({
         );
     },
 
-    // Write Console App
+    // Write VLCForms App
     _writingApplicationVCLForms: function () {
 
         var context = this;
@@ -468,6 +468,43 @@ module.exports = Generator.extend({
         this.fs.copyTpl(
             this.templatePath('application\\vcl\\uFmMain.dfm'),
             this.destinationPath(path.join(context.configOnConstructor.projectName, 'uFmMain.dfm')),
+            { name: context.configOnConstructor.projectName }
+        );
+    },
+
+    // Write FireMonkey App
+    _writingApplicationFireMonkey: function () {
+
+        var context = this;
+
+        debugLog(this, '_writingFireMonkey ' + context.configOnConstructor.projectName);
+        debugLog(this, '_writingFireMonkey ' + this.configOnConstructor.projectName);
+
+        debugLog(this, 'from: ' + path.join(context.configOnConstructor.projectType, 'FireMonkeyApp.dpr'));
+        debugLog(this, 'to: ' + path.join(context.configOnConstructor.projectName, 'FireMonkeyApp.dpr'));
+
+        function trimWhitespaces(text) {
+            return text.replace(/\s/g, "");
+        }
+
+        this.fs.copyTpl(
+            this.templatePath('application\\firemonkey\\FireMonkeyApp.dpr'),
+            this.destinationPath(path.join(context.configOnConstructor.projectName, context.configOnConstructor.projectName + '.dpr')),
+            { name: context.configOnConstructor.projectName }
+        );
+        this.fs.copyTpl(
+            this.templatePath('application\\firemonkey\\FireMonkeyApp.dproj'),
+            this.destinationPath(path.join(context.configOnConstructor.projectName, context.configOnConstructor.projectName + '.dproj')),
+            { name: context.configOnConstructor.projectName }
+        );
+        this.fs.copyTpl(
+            this.templatePath('application\\firemonkey\\uFmMain.pas'),
+            this.destinationPath(path.join(context.configOnConstructor.projectName, 'uFmMain.pas')),
+            { name: context.configOnConstructor.projectName }
+        );
+        this.fs.copyTpl(
+            this.templatePath('application\\firemonkey\\uFmMain.fmx'),
+            this.destinationPath(path.join(context.configOnConstructor.projectName, 'uFmMain.fmx')),
             { name: context.configOnConstructor.projectName }
         );
     },
