@@ -33,14 +33,14 @@ These are the available projects:
 ```
 ├── Aplication
 │   ├── Console
-│   └── VCL Forms
+│   ├── VCL Forms
+│   └── FireMonkey
 ├── Package
 │   ├── Runtime
 │   ├── Designtime
 │   └── Runtime and Designtime
 └── Unit Test
-    ├── Console
-    └── GUI
+    └── Console
 ```
 
 There are some specific options for each kind of project, which you will be able to choose/type while using the generator
