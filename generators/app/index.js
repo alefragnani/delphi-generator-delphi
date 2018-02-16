@@ -4,7 +4,7 @@ var chalk = require('chalk');
 var yosay = require('yosay');
 var path = require("path");
 
-var DEBUG_MODE = false;
+var DEBUG_MODE = true;
 function debugLog(athis, message) {
     if (DEBUG_MODE) {
         athis.log(message)
@@ -257,34 +257,16 @@ module.exports = Generator.extend({
             return this.prompt([{
                 type: 'list',
                 name: 'projectUnitTestType',
-                message: 'Choose the Unit Test Type',
-                choices: ['Console'/*, 'GUI'*/],
-                default: 'Console'
+                message: 'Choose the Unit Test Framework',
+                choices: ['DUnit', 'DUnitX'/*, 'GUI'*/],
+                default: 'DUnit'
             }]).then((answers) => {
                 //this.log('Choose only one.... (projectApplicationType)....: ', answers.projectApplicationType);
                 this.configOnConstructor.projectUnitTestType = answers.projectUnitTestType;
             });
         },
 
-        askForProjectUnitTestRunnerType: function () {
-
-            if (this.configOnConstructor.projectUnitTestType !== 'Console') {
-                // debugLog(this, 'left projectType');
-                return;
-            }
-
-            return this.prompt([{
-                type: 'list',
-                name: 'projectUnitTestRunnerType',
-                message: 'Choose the Runner Type',
-                choices: ['Text', 'XML'],
-                default: 'Text'
-            }]).then((answers) => {
-                //this.log('Choose only one.... (projectApplicationType)....: ', answers.projectApplicationType);
-                this.configOnConstructor.projectUnitTestRunnerType = answers.projectUnitTestRunnerType;
-            });
-        },
-
+        // UNIT TEST
         askForProjectUnitTestName: function () {
 
             if (this.configOnConstructor.projectType !== 'Unit Test') {
@@ -307,6 +289,130 @@ module.exports = Generator.extend({
             });
         },
 
+        // DUNIT-ENDS HERE
+        askForProjectUnitTestRunnerType: function () {
+
+            if (this.configOnConstructor.projectUnitTestType !== 'DUnit') {
+                // debugLog(this, 'left projectType');
+                return;
+            }
+
+            return this.prompt([{
+                type: 'list',
+                name: 'projectUnitTestRunnerType',
+                message: 'Choose the Runner Type',
+                choices: ['Text', 'XML'],
+                default: 'Text'
+            }]).then((answers) => {
+                //this.log('Choose only one.... (projectApplicationType)....: ', answers.projectApplicationType);
+                this.configOnConstructor.projectUnitTestRunnerType = answers.projectUnitTestRunnerType;
+            });
+        },
+                
+        // DUNITX
+        askForProjectUnitTestDUnitXLoggerNUnit: function () {
+
+            if (this.configOnConstructor.projectUnitTestType !== 'DUnitX') {
+                // debugLog(this, 'left projectType');
+                return;
+            }
+
+            return this.prompt([{
+                type: 'confirm',
+                name: 'projectUnitTestDUnitXLoggerNUnit',
+                message: 'Would you like to log the tests in file?'
+            }]).then((answers) => {
+                //this.log('Choose only one.... (projectApplicationType)....: ', answers.projectApplicationType);
+                this.configOnConstructor.projectUnitTestDUnitXLoggerNUnit = answers.projectUnitTestDUnitXLoggerNUnit;
+            });
+        },
+
+        // DUNIT X
+        askForProjectUnitTestDUnitXCreateTestUnit: function () {
+
+            if (this.configOnConstructor.projectUnitTestType !== 'DUnitX') {
+                debugLog(this, 'left projectUnitTestType !== DUnitX');
+                return;
+            }
+
+            return this.prompt([{
+                type: 'confirm',
+                name: 'projectUnitTestDUnitXCreateTestUnit',
+                message: 'Would you like to create Test Unit?'
+            },]).then((answers) => {
+                this.configOnConstructor.projectUnitTestDUnitXCreateTestUnit = answers.projectUnitTestDUnitXCreateTestUnit;
+            });
+        },
+
+        askForProjectUnitTestDUnitXFixtureClassName: function () {
+
+            if (this.configOnConstructor.projectUnitTestType !== 'DUnitX') {
+                debugLog(this, 'left projectUnitTestType !== DUnitX');
+                return;
+            }
+
+            if (!this.configOnConstructor.projectUnitTestDUnitXCreateTestUnit) {
+                debugLog(this, 'left !projectUnitTestDUnitXCreateTestUnit');
+                return;
+            }
+
+            return this.prompt([{
+                type: 'input',
+                name: 'projectUnitTestDUnitXFixtureName',
+                message: 'What\'s the name of your TestFixture Class',
+                default: 'MyTestObject',
+                validate: function(value) {
+                    return isValidProjectName(value)
+                }
+            }]).then((answers) => {
+                this.configOnConstructor.projectUnitTestDUnitXFixtureName = answers.projectUnitTestDUnitXFixtureName;
+            });
+        },
+
+        askForProjectUnitTestDUnitXCreateSetupTearDown: function () {
+
+            if (this.configOnConstructor.projectUnitTestType !== 'DUnitX') {
+                debugLog(this, 'left projectUnitTestType !== DUnitX');
+                return;
+            }
+
+            if (!this.configOnConstructor.projectUnitTestDUnitXCreateTestUnit) {
+                debugLog(this, 'left !projectUnitTestDUnitXCreateTestUnit');
+                return;
+            }
+
+            return this.prompt([{
+                type: 'confirm',
+                name: 'projectUnitTestDUnitXCreateSetupTearDown',
+                message: 'Would you like to create Setup and TearDown methods?'
+            },]).then((answers) => {
+                this.configOnConstructor.projectUnitTestDUnitXCreateSetupTearDown = answers.projectUnitTestDUnitXCreateSetupTearDown;
+            });
+        },
+
+        askForProjectUnitTestDUnitXCreateSampleTestMethods: function () {
+
+            if (this.configOnConstructor.projectUnitTestType !== 'DUnitX') {
+                debugLog(this, 'left projectUnitTestType !== DUnitX');
+                return;
+            }
+
+            if (!this.configOnConstructor.projectUnitTestDUnitXCreateTestUnit) {
+                debugLog(this, 'left !projectUnitTestDUnitXCreateTestUnit');
+                return;
+            }
+
+            return this.prompt([{
+                type: 'confirm',
+                name: 'projectUnitTestDUnitXCreateSampleTestMethods',
+                message: 'Would you like to create Sample Test methods?'
+            },]).then((answers) => {
+                this.configOnConstructor.projectUnitTestDUnitXCreateSampleTestMethods = answers.projectUnitTestDUnitXCreateSampleTestMethods;
+            });
+        },
+
+
+        // GIT
         askForGit: function () {
 
             return this.prompt({
@@ -373,8 +479,11 @@ module.exports = Generator.extend({
                 break;
             case 'Unit Test':
                 switch (this.configOnConstructor.projectUnitTestType) {
-                    case 'Console':
+                    case 'DUnit':
                         this._writingUnitTestConsole();
+                        break;
+                    case 'DUnitX':
+                        this._writingUnitTestDUnitX();
                         break;
                     case 'GUI':
                         this._writingUnitTestGUI();
@@ -598,6 +707,33 @@ module.exports = Generator.extend({
         );
         this.fs.copyTpl(
             this.templatePath('unit_test\\console\\ConsoleApp.dproj'),
+            this.destinationPath(path.join(context.configOnConstructor.projectName + 'Tests', context.configOnConstructor.projectName + 'Tests.dproj')),
+            { name: context.configOnConstructor.projectName, 
+            projectUnitTestRunnerType: context.configOnConstructor.projectUnitTestRunnerType }
+        );
+
+        this.configOnConstructor.projectName = context.configOnConstructor.projectName + 'Tests';
+    },
+
+    _writingUnitTestDUnitX: function () {
+
+        var context = this;
+
+        // debugLog(this, '_writingUnitTestConsole ' + context.configOnConstructor.projectName);
+        // debugLog(this, '_writingUnitTestConsole ' + this.configOnConstructor.projectName);
+
+        // debugLog(this, 'from: ' + path.join(context.configOnConstructor.projectUnitTestType, 'ConsoleApp.dpr'));
+        // debugLog(this, 'from: ' + path.join('unit_test\\console', 'ConsoleApp.dpr'));
+        // debugLog(this, 'to: ' + path.join(context.configOnConstructor.projectName, 'ConsoleApp.dpr'));
+
+        this.fs.copyTpl(
+            this.templatePath('unit_test\\dunitx\\ConsoleApp.dpr'),
+            this.destinationPath(path.join(context.configOnConstructor.projectName + 'Tests', context.configOnConstructor.projectName + 'Tests.dpr')),
+            { name: context.configOnConstructor.projectName, 
+            projectUnitTestRunnerType: context.configOnConstructor.projectUnitTestRunnerType }
+        );
+        this.fs.copyTpl(
+            this.templatePath('unit_test\\dunitx\\ConsoleApp.dproj'),
             this.destinationPath(path.join(context.configOnConstructor.projectName + 'Tests', context.configOnConstructor.projectName + 'Tests.dproj')),
             { name: context.configOnConstructor.projectName, 
             projectUnitTestRunnerType: context.configOnConstructor.projectUnitTestRunnerType }
