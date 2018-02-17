@@ -1,4 +1,4 @@
-program DUnitXAppTests;
+program <%= name %>Tests;
 
 {$IFNDEF TESTINSIGHT}
 {$APPTYPE CONSOLE}
@@ -8,16 +8,16 @@ uses
   {$IFDEF TESTINSIGHT}
   TestInsight.DUnitX,
   {$ENDIF }
-  DUnitX.Loggers.Console,
-  DUnitX.Loggers.Xml.NUnit,
-  DUnitX.TestFramework,
-  NewTestFixture in 'NewTestFixture.pas';
-
+  DUnitX.Loggers.Console
+  <%= usesRunner %>
+  , DUnitX.TestFramework
+  <%- usesFixture %>
+  ;
 var
   runner : ITestRunner;
   results : IRunResults;
   logger : ITestLogger;
-  nunitLogger : ITestLogger;
+  <%= varRunner %>
 begin
 {$IFDEF TESTINSIGHT}
   TestInsight.DUnitX.RunRegisteredTests;
@@ -35,8 +35,7 @@ begin
     logger := TDUnitXConsoleLogger.Create(true);
     runner.AddLogger(logger);
     //Generate an NUnit compatible XML File
-    nunitLogger := TDUnitXXMLNUnitFileLogger.Create(TDUnitX.Options.XMLOutputFile);
-    runner.AddLogger(nunitLogger);
+    <%= instantiateRunner %>
     runner.FailsOnNoAsserts := False; //When true, Assertions must be made during tests;
 
     //Run tests
