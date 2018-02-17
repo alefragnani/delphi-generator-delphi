@@ -26,5 +26,13 @@ Starts with a LIST
     * Runner [LIST]
       * Text
       * XML  
-  * GUI
-    * Name [INPUT]
+  <!-- * GUI
+    * Name [INPUT] -->
+  
+  * DUnitX
+   * Name [INPUT]
+   * Logger [Y/n]
+   * CreateUnitTest [Y/n]
+     * TestFixtureClassName [INPUT]
+     * Create Setup and TearDown [Y/n]
+     * Create Sample Test Methods [Y/n]
