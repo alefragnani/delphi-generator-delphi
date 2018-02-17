@@ -40,7 +40,8 @@ These are the available projects:
 │   ├── Designtime
 │   └── Runtime and Designtime
 └── Unit Test
-    └── Console
+    ├── DUnit
+    └── DUnitX
 ```
 
 There are some specific options for each kind of project, which you will be able to choose/type while using the generator
