@@ -4,7 +4,7 @@ var chalk = require('chalk');
 var yosay = require('yosay');
 var path = require("path");
 
-var DEBUG_MODE = true;
+var DEBUG_MODE = false;
 function debugLog(athis, message) {
     if (DEBUG_MODE) {
         athis.log(message)
@@ -41,52 +41,13 @@ module.exports = Generator.extend({
 
     prompting: {
 
-        //         askForType2: function () {
-        //     return this.prompt([{
-        //         type: 'input',
-        //         name: 'promptTypeInput',
-        //         message: 'Your project name',
-        //         validate: function (value) {
-        //             if (value !== 'hi') {
-        //                 return "Invalid Type Input (use 'hi')";
-        //             } else {
-        //                 return true;
-        //             }
-        //         },
-        //         default: this.appname // Default to current folder name
-        //     }, {
-        //         type: 'list',
-        //         name: 'promptTypeList',
-        //         message: 'Choose only one item from the list',
-        //         choices: ['First', 'Second', 'Third'],
-        //         default: 'First' // Default to the first one
-        //     }, {
-        //         type: 'checkbox',
-        //         name: 'promptTypeCheckbox',
-        //         message: 'Select all items that apply',
-        //         choices: ['First Item', 'Second Item', 'Third Item', 'Fourth Item'],
-        //         default: '' // Default to no one
-        //     }, {
-        //         type: 'confirm',
-        //         name: 'promptTypeConfirm',
-        //         message: 'Would you like to enable the Cool feature?'
-        //     }]).then((answers) => {
-        //         this.log('Your project name.. (promptTypeInput)...: ', answers.promptTypeInput);
-        //         this.log('Choose only one.... (promptTypeList)....: ', answers.promptTypeList);
-        //         this.log('Select all items... (promptTypeCheckbox): ', answers.promptTypeCheckbox);
-        //         this.log('Would you like..... (promptTypeConfirm).: ', answers.promptTypeConfirm);
-
-        //         this.configOnConstructor.name = answers.promptTypeInput;
-        //     });
-        // },
-
         askForProjectType: function () {
             
             return this.prompt([{
                 type: 'list',
                 name: 'projectType',
                 message: 'Choose the Project Type',
-                choices: ['Application', 'Package', 'Unit Test'/*, 'OTA'*/],
+                choices: ['Application', 'Package', 'Unit Test'],
                 default: 'Application'
             }]).then((answers) => {
                 this.configOnConstructor.projectType = answers.projectType;
@@ -188,7 +149,6 @@ module.exports = Generator.extend({
             });
         },
 
-
         // PACKAGE
         askForProjectPackageDetails: function () {
 
@@ -243,9 +203,6 @@ module.exports = Generator.extend({
             });
         },
 
-
-
-
         // UNIT TEST
         askForProjectUnitTestType: function () {
 
@@ -284,7 +241,6 @@ module.exports = Generator.extend({
                 }
             }]).then((answers) => {
                 //this.log('Choose only one.... (projectName)....: ', answers.projectName);
-
                 this.configOnConstructor.projectName = answers.projectName;
             });
         },
@@ -449,6 +405,9 @@ module.exports = Generator.extend({
         debugLog(this, 'configOnConstructor.projectUnitTestType: ' + this.configOnConstructor.projectUnitTestType);
         debugLog(this, 'configOnConstructor.projectUnitTestRunnerType: ' + this.configOnConstructor.projectUnitTestRunnerType);
 
+        debugLog(this, 'DUnitX');
+        debugLog(this, 'configOnConstructor.projectUnitTestDUnitXCreateTestUnit: ' + this.configOnConstructor.projectUnitTestDUnitXCreateTestUnit);
+
         this.configOnConstructor.projectNameWithExtension = this.configOnConstructor.projectName +
           (this.configOnConstructor.projectType === 'Unit Test' ? 'Tests' : '') +
           (this.configOnConstructor.projectType === 'Package' ? '.dpk' : '.dpr');
@@ -485,9 +444,9 @@ module.exports = Generator.extend({
                     case 'DUnitX':
                         this._writingUnitTestDUnitX();
                         break;
-                    case 'GUI':
-                        this._writingUnitTestGUI();
-                        break;
+                    // case 'GUI':
+                    //     this._writingUnitTestGUI();
+                    //     break;
                     default:
                         break;
                 }
@@ -719,25 +678,130 @@ module.exports = Generator.extend({
 
         var context = this;
 
-        // debugLog(this, '_writingUnitTestConsole ' + context.configOnConstructor.projectName);
-        // debugLog(this, '_writingUnitTestConsole ' + this.configOnConstructor.projectName);
+        function translateUsesRunner(runner) {
+            if (!runner) {
+                return "";
+            } else {
+                return ", DUnitX.Loggers.Xml.NUnit"
+            }
+        }
 
-        // debugLog(this, 'from: ' + path.join(context.configOnConstructor.projectUnitTestType, 'ConsoleApp.dpr'));
-        // debugLog(this, 'from: ' + path.join('unit_test\\console', 'ConsoleApp.dpr'));
-        // debugLog(this, 'to: ' + path.join(context.configOnConstructor.projectName, 'ConsoleApp.dpr'));
+        function translateVarRunner(runner) {
+            if (!runner) {
+                return "";  
+            } else {
+                return "nunitLogger : ITestLogger;";
+            }
+        }
+
+        function translateInstantiateRunner(runner) {
+            if (!runner) {
+                return "";  
+            } else {
+                return "nunitLogger := TDUnitXXMLNUnitFileLogger.Create(TDUnitX.Options.XMLOutputFile);\n" + 
+                    "    runner.AddLogger(nunitLogger);";
+            }
+        }
+
+        function translateUsesFixture(fixture) {
+            if (!fixture) {
+                return "";
+            } else {
+                return ", " + fixture + " in \'" + fixture + ".pas\'";
+            }
+        }
+
+        function translateReferenceFixture(fixture) {
+            if (!fixture) {
+                return "";
+            } else {
+                return "<DCCReference Include=\"" + fixture + ".pas\"/>";
+            }
+        }
+
+        function translateInterfaceSetupTearDown(setupTearDown) {
+            if (!setupTearDown) {
+                return "";
+            } else {
+                return "[Setup]\n" + 
+                    "    procedure Setup;\n" +
+                    "    [TearDown]\n" +
+                    "    procedure TearDown;";
+            }
+        }
+
+        function translateInterfaceSampleMethods(sampleMethods) {
+            if (!sampleMethods) {
+                return "";
+            } else {
+                return "// Sample Methods\n" +
+                    "    // Simple single Test\n" +
+                    "    [Test]\n" +
+                    "    procedure Test1;\n" +
+                    "    // Test with TestCase Attribute to supply parameters.\n" +
+                    "    [Test]\n" +
+                    "    [TestCase(\'TestA\',\'1,2\')]\n" +
+                    "    [TestCase(\'TestB\',\'3,4\')]\n" +
+                    "    procedure Test2(const AValue1 : Integer;const AValue2 : Integer);";
+            }
+        }
+
+        function translateImplementationSetupTearDown(setupTearDown, fixture) {
+            if (!setupTearDown) {
+                return "";
+            } else {
+                return "procedure T" + fixture + ".Setup;\n" +
+                    "begin\n" +
+                    "end;\n" +
+                    "\n" +
+                    "procedure T" + fixture + ".TearDown;\n" +
+                    "begin\n" +
+                    "end;\n";
+            }
+        }
+
+        function translateImplementationSampleMethods(sampleMethods, fixture) {
+            if (!sampleMethods) {
+                return "";
+            } else {
+                return "procedure T" + fixture + ".Test1;\n" +
+                    "begin\n" +
+                    "end;\n" +
+                    "\n" +
+                    "procedure T" + fixture + ".Test2(const AValue1 : Integer;const AValue2 : Integer);\n" +
+                    "begin\n" +
+                    "end;\n";
+            }
+        }        
 
         this.fs.copyTpl(
-            this.templatePath('unit_test\\dunitx\\ConsoleApp.dpr'),
+            this.templatePath('unit_test\\dunitx\\DUnitXAppTests.dpr'),
             this.destinationPath(path.join(context.configOnConstructor.projectName + 'Tests', context.configOnConstructor.projectName + 'Tests.dpr')),
             { name: context.configOnConstructor.projectName, 
-            projectUnitTestRunnerType: context.configOnConstructor.projectUnitTestRunnerType }
+            usesRunner: translateUsesRunner(context.configOnConstructor.projectUnitTestDUnitXLoggerNUnit),
+            usesFixture: translateUsesFixture(context.configOnConstructor.projectUnitTestDUnitXFixtureName),
+            varRunner: translateVarRunner(context.configOnConstructor.projectUnitTestDUnitXLoggerNUnit),
+            instantiateRunner: translateInstantiateRunner(context.configOnConstructor.projectUnitTestDUnitXLoggerNUnit) }
         );
         this.fs.copyTpl(
-            this.templatePath('unit_test\\dunitx\\ConsoleApp.dproj'),
+            this.templatePath('unit_test\\dunitx\\DUnitXAppTests.dproj'),
             this.destinationPath(path.join(context.configOnConstructor.projectName + 'Tests', context.configOnConstructor.projectName + 'Tests.dproj')),
             { name: context.configOnConstructor.projectName, 
-            projectUnitTestRunnerType: context.configOnConstructor.projectUnitTestRunnerType }
+            dccReferenceFixture: translateReferenceFixture(context.configOnConstructor.projectUnitTestDUnitXFixtureName) }
         );
+        if (context.configOnConstructor.projectUnitTestDUnitXCreateTestUnit) {
+            this.fs.copyTpl(
+                this.templatePath('unit_test\\dunitx\\NewTestFixture.pas'),
+                this.destinationPath(path.join(context.configOnConstructor.projectName + 'Tests', context.configOnConstructor.projectUnitTestDUnitXFixtureName + '.pas')),
+                {
+                    name: context.configOnConstructor.projectUnitTestDUnitXFixtureName,
+                    interfaceSetupTearDown: translateInterfaceSetupTearDown(context.configOnConstructor.projectUnitTestDUnitXCreateSetupTearDown),
+                    interfaceSampleMethods: translateInterfaceSampleMethods(context.configOnConstructor.projectUnitTestDUnitXCreateSampleTestMethods),
+                    implementationSetupTearDown: translateImplementationSetupTearDown(context.configOnConstructor.projectUnitTestDUnitXCreateSetupTearDown, context.configOnConstructor.projectUnitTestDUnitXFixtureName),
+                    implementationSampleMethods: translateImplementationSampleMethods(context.configOnConstructor.projectUnitTestDUnitXCreateSampleTestMethods, context.configOnConstructor.projectUnitTestDUnitXFixtureName)
+                }
+            );
+        }
 
         this.configOnConstructor.projectName = context.configOnConstructor.projectName + 'Tests';
     },
