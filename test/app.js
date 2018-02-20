@@ -17,7 +17,7 @@ describe('Test Delphi Generator - Application', function () {
   //     'dummyfile.txt'
   //   ]);
   // });
-  it('generates a Console Application', function (done) {
+  it('Generates a Console Application', function (done) {
     this.timeout(10000);
 
     helpers.run(path.join(__dirname, '../generators/app'))
@@ -50,7 +50,7 @@ describe('Test Delphi Generator - Application', function () {
       });
   });
 
-  it('generates a VCL Application with no VCL Styles', function (done) {
+  it('Generates a VCL Application with no VCL Styles', function (done) {
     this.timeout(10000);
 
     helpers.run(path.join(__dirname, '../generators/app'))
@@ -85,7 +85,7 @@ describe('Test Delphi Generator - Application', function () {
       });
   });
 
-  it('generates a VCL Application with VCL Styles', function (done) {
+  it('Generates a VCL Application with VCL Styles', function (done) {
     this.timeout(10000);
 
     helpers.run(path.join(__dirname, '../generators/app'))
@@ -121,7 +121,7 @@ describe('Test Delphi Generator - Application', function () {
       });
   });
 
-  it('generates a FireMonkey Application', function (done) {
+  it('Generates a FireMonkey Application', function (done) {
     this.timeout(10000);
 
     helpers.run(path.join(__dirname, '../generators/app'))
@@ -157,7 +157,7 @@ describe('Test Delphi Generator - Application', function () {
 
 describe('Test Delphi Generator - Package', function () {
 
-  it('generates a Runtime package Package with explicit rebuild', function (done) {
+  it('Generates a Runtime package Package with explicit rebuild', function (done) {
     this.timeout(10000);
 
     helpers.run(path.join(__dirname, '../generators/app'))
@@ -195,7 +195,7 @@ describe('Test Delphi Generator - Package', function () {
         }
       });
   });
-  it('generates a Designtime package Package with implicit rebuild', function (done) {
+  it('Generates a Designtime package Package with implicit rebuild', function (done) {
     this.timeout(10000);
 
     helpers.run(path.join(__dirname, '../generators/app'))
@@ -224,10 +224,10 @@ describe('Test Delphi Generator - Package', function () {
                 assert.equal(result.Project.PropertyGroup[7].DesignOnlyPackage[0], expected.projectPackageUsageOptions);
                 assert.equal(result.Project.PropertyGroup[7].DCC_OutputNeverBuildDcps, expected.projectPackageBuildControl);
                 assert.equal(result.Project.PropertyGroup[11].DCC_Description[0], expected.projectPackageDescription);
+                done();
               });
           });
 
-          done();
         } catch (e) {
           done(e);
         }
@@ -237,7 +237,7 @@ describe('Test Delphi Generator - Package', function () {
 });
 describe('Test Delphi Generator - Unit Test', function () {
 
-  it('generates a DUnit Unit Test using a Text runner', function (done) {
+  it('Generates a DUnit Unit Test using a Text runner', function (done) {
     this.timeout(10000);
 
     helpers.run(path.join(__dirname, '../generators/app'))
@@ -248,16 +248,30 @@ describe('Test Delphi Generator - Unit Test', function () {
         projectUnitTestRunnerType: 'Text'
       }) // Mock the prompt answers
       .toPromise().then(function () {
+        var expected = {
+          "projectName": "testDUnitTests.dpr",
+          "sanitizedProjectName": "testDUnitTests"
+        }
         try {
           assert.file(['testDUnitTests.dpr', 'testDUnitTests.dproj']);
-          done();
+
+          // check dproj (xml) file contents
+          var parser = new xml2js.Parser();
+          fs.readFile('testDUnitTests.dproj', function(err, data) {
+              parser.parseString(data, function (err, result) {
+                assert.equal(result.Project.PropertyGroup[0].MainSource[0], expected.projectName);
+                assert.equal(result.Project.PropertyGroup[7].SanitizedProjectName[0], expected.sanitizedProjectName);
+                assert.equal(result.Project.ProjectExtensions[0].BorlandProject[0]["Delphi.Personality"][0].Source[0].Source[0]["_"], expected.projectName);
+                done();
+              });
+          });
         } catch (e) {
           done(e);
         }
       });
   });
 
-  it('generates a DUnit Unit Test using a XML runner', function (done) {
+  it('Generates a DUnit Unit Test using a XML runner', function (done) {
     this.timeout(10000);
 
     helpers.run(path.join(__dirname, '../generators/app'))
@@ -268,16 +282,29 @@ describe('Test Delphi Generator - Unit Test', function () {
         projectUnitTestRunnerType: 'XML'
       }) // Mock the prompt answers
       .toPromise().then(function () {
+        var expected = {
+          "projectName": "testDUnitTests.dpr",
+          "sanitizedProjectName": "testDUnitTests"
+        }
         try {
           assert.file(['testDUnitTests.dpr', 'testDUnitTests.dproj']);
-          done();
+          // check dproj (xml) file contents
+          var parser = new xml2js.Parser();
+          fs.readFile('testDUnitTests.dproj', function(err, data) {
+              parser.parseString(data, function (err, result) {
+                assert.equal(result.Project.PropertyGroup[0].MainSource[0], expected.projectName);
+                assert.equal(result.Project.PropertyGroup[7].SanitizedProjectName[0], expected.sanitizedProjectName);
+                assert.equal(result.Project.ProjectExtensions[0].BorlandProject[0]["Delphi.Personality"][0].Source[0].Source[0]["_"], expected.projectName);
+                done();
+              });
+          });
         } catch (e) {
           done(e);
         }
       });
   });
 
-  it('generates a DUnitX Unit Test with no Fixture class', function (done) {
+  it('Generates a DUnitX Unit Test with no Fixture class', function (done) {
     this.timeout(10000);
 
     helpers.run(path.join(__dirname, '../generators/app'))
@@ -288,9 +315,24 @@ describe('Test Delphi Generator - Unit Test', function () {
         projectUnitTestDUnitXCreateTestUnit: false,
       }) // Mock the prompt answers
       .toPromise().then(function () {
+        var expected = {
+          "projectName": "testDUnitXTests.dpr",
+          "sanitizedProjectName": "testDUnitXTests",
+          "fixtureName": undefined
+        }
         try {
           assert.file(['testDUnitXTests.dpr', 'testDUnitXTests.dproj']);
-          done();
+          // check dproj (xml) file contents
+          var parser = new xml2js.Parser();
+          fs.readFile('testDUnitXTests.dproj', function(err, data) {
+              parser.parseString(data, function (err, result) {
+                assert.equal(result.Project.PropertyGroup[0].MainSource[0], expected.projectName);
+                assert.equal(result.Project.PropertyGroup[6].SanitizedProjectName[0], expected.sanitizedProjectName);
+                assert.equal(result.Project.ItemGroup[0].DCCReference, expected.fixtureName);
+                assert.equal(result.Project.ProjectExtensions[0].BorlandProject[0]["Delphi.Personality"][0].Source[0].Source[0]["_"], expected.projectName);
+                done();
+              });
+          });
         } catch (e) {
           done(e);
         }
@@ -298,7 +340,7 @@ describe('Test Delphi Generator - Unit Test', function () {
   });
 
 
-  it('generates a DUnitX Unit Test with a Fixture class', function (done) {
+  it('Generates a DUnitX Unit Test with a Fixture class', function (done) {
     this.timeout(10000);
 
     helpers.run(path.join(__dirname, '../generators/app'))
@@ -310,9 +352,24 @@ describe('Test Delphi Generator - Unit Test', function () {
         projectUnitTestDUnitXFixtureName: 'testDUnitXFixture',
       }) // Mock the prompt answers
       .toPromise().then(function () {
+        var expected = {
+          "projectName": "testDUnitXTests.dpr",
+          "sanitizedProjectName": "testDUnitXTests",
+          "fixtureName": "testDUnitXFixture.pas"
+        }
         try {
           assert.file(['testDUnitXTests.dpr', 'testDUnitXTests.dproj', 'testDUnitXFixture.pas']);
-          done();
+          // check dproj (xml) file contents
+          var parser = new xml2js.Parser();
+          fs.readFile('testDUnitXTests.dproj', function(err, data) {
+              parser.parseString(data, function (err, result) {
+                assert.equal(result.Project.PropertyGroup[0].MainSource[0], expected.projectName);
+                assert.equal(result.Project.PropertyGroup[6].SanitizedProjectName[0], expected.sanitizedProjectName);
+                assert.equal(result.Project.ItemGroup[0].DCCReference[0]["$"].Include, expected.fixtureName);
+                assert.equal(result.Project.ProjectExtensions[0].BorlandProject[0]["Delphi.Personality"][0].Source[0].Source[0]["_"], expected.projectName);
+                done();
+              });
+          });
         } catch (e) {
           done(e);
         }
