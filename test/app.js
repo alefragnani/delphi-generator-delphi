@@ -3,7 +3,9 @@ var path = require('path');
 var assert = require('yeoman-assert');
 var helpers = require('yeoman-test');
 var fs = require('fs');
-describe('test delphi generator', function () {
+var xml2js = require('xml2js')
+
+describe('Test Delphi Generator - Application', function () {
   // before(function () {
   //   return helpers.run(path.join(__dirname, '../generators/app'))
   //     .withPrompts({someAnswer: true})
@@ -15,7 +17,7 @@ describe('test delphi generator', function () {
   //     'dummyfile.txt'
   //   ]);
   // });
-  it('Application - Console', function (done) {
+  it('generates a Console Application', function (done) {
     this.timeout(10000);
 
     helpers.run(path.join(__dirname, '../generators/app'))
@@ -34,7 +36,7 @@ describe('test delphi generator', function () {
       });
   });
 
-  it('Application - VCL Forms - No VCL Styles', function (done) {
+  it('generates a VCL Application with no VCL Styles', function (done) {
     this.timeout(10000);
 
     helpers.run(path.join(__dirname, '../generators/app'))
@@ -54,7 +56,7 @@ describe('test delphi generator', function () {
       });
   });
 
-  it('Application - VCL Forms - VCL Styles', function (done) {
+  it('generates a VCL Application with VCL Styles', function (done) {
     this.timeout(10000);
 
     helpers.run(path.join(__dirname, '../generators/app'))
@@ -74,7 +76,7 @@ describe('test delphi generator', function () {
       });
   });
 
-  it('Application - FireMonkey', function (done) {
+  it('generates a FireMonkey Application', function (done) {
     this.timeout(10000);
 
     helpers.run(path.join(__dirname, '../generators/app'))
@@ -93,7 +95,11 @@ describe('test delphi generator', function () {
       });
   });
 
-  it('Package', function (done) {
+});
+
+describe('Test Delphi Generator - Package', function () {
+
+  it('generates a Runtime package Package with explicit rebuild', function (done) {
     this.timeout(10000);
 
     helpers.run(path.join(__dirname, '../generators/app'))
@@ -102,12 +108,67 @@ describe('test delphi generator', function () {
         projectName: 'testPackage',
         projectPackageDescription: 'Test Package',
         projectPackageUsageOptions: 'Runtime',
-        projectPackageBuildControl: 'Rebuils as Needed',
-        projectPackageRequires: '(vcl,designide)'
+        projectPackageBuildControl: 'Explicit Rebuild'
       }) // Mock the prompt answers
       .toPromise().then(function () {
+        var expected = {
+          "projectName": "testPackage",
+          "projectPackageDescription": "Test Package",
+          "projectPackageUsageOptions": "true",
+          "projectPackageBuildControl": "true"
+        }
         try {
           assert.file(['testPackage.dpk', 'testPackage.dproj']);
+
+          // check dproj (xml) file contents
+          var parser = new xml2js.Parser();
+          fs.readFile('testPackage.dproj', function(err, data) {
+              parser.parseString(data, function (err, result) {
+                assert.equal(result.Project.PropertyGroup[7].SanitizedProjectName[0], expected.projectName);
+                assert.equal(result.Project.PropertyGroup[7].RuntimeOnlyPackage[0], expected.projectPackageUsageOptions);
+                assert.equal(result.Project.PropertyGroup[7].DCC_OutputNeverBuildDcps[0], expected.projectPackageBuildControl);
+                assert.equal(result.Project.PropertyGroup[11].DCC_Description[0], expected.projectPackageDescription);
+              });
+          });
+
+          done();
+        } catch (e) {
+          done(e);
+        }
+      });
+  });
+  it('generates a Designtime package Package with implicit rebuild', function (done) {
+    this.timeout(10000);
+
+    helpers.run(path.join(__dirname, '../generators/app'))
+      .withPrompts({
+        projectType: 'Package',
+        projectName: 'testPackage',
+        projectPackageDescription: 'Test Package',
+        projectPackageUsageOptions: 'Designtime',
+        projectPackageBuildControl: 'Rebuild as Needed'
+      }) // Mock the prompt answers
+      .toPromise().then(function () {
+        var expected = {
+          "projectName": "testPackage",
+          "projectPackageDescription": "Test Package",
+          "projectPackageUsageOptions": "true",
+          "projectPackageBuildControl": undefined
+        }
+        try {
+          assert.file(['testPackage.dpk', 'testPackage.dproj']);
+
+          // check dproj (xml) file contents
+          var parser = new xml2js.Parser();
+          fs.readFile('testPackage.dproj', function(err, data) {
+              parser.parseString(data, function (err, result) {
+                assert.equal(result.Project.PropertyGroup[7].SanitizedProjectName[0], expected.projectName);
+                assert.equal(result.Project.PropertyGroup[7].DesignOnlyPackage[0], expected.projectPackageUsageOptions);
+                assert.equal(result.Project.PropertyGroup[7].DCC_OutputNeverBuildDcps, expected.projectPackageBuildControl);
+                assert.equal(result.Project.PropertyGroup[11].DCC_Description[0], expected.projectPackageDescription);
+              });
+          });
+
           done();
         } catch (e) {
           done(e);
@@ -115,7 +176,10 @@ describe('test delphi generator', function () {
       });
   });
 
-  it('Unit Test - DUnit - Text', function (done) {
+});
+describe('Test Delphi Generator - Unit Test', function () {
+
+  it('generates a DUnit Unit Test using a Text runner', function (done) {
     this.timeout(10000);
 
     helpers.run(path.join(__dirname, '../generators/app'))
@@ -135,7 +199,7 @@ describe('test delphi generator', function () {
       });
   });
 
-  it('Unit Test - DUnit - XML', function (done) {
+  it('generates a DUnit Unit Test using a XML runner', function (done) {
     this.timeout(10000);
 
     helpers.run(path.join(__dirname, '../generators/app'))
@@ -155,7 +219,7 @@ describe('test delphi generator', function () {
       });
   });
 
-  it('Unit Test - DUnitX - No Fixture', function (done) {
+  it('generates a DUnitX Unit Test with no Fixture class', function (done) {
     this.timeout(10000);
 
     helpers.run(path.join(__dirname, '../generators/app'))
@@ -176,7 +240,7 @@ describe('test delphi generator', function () {
   });
 
 
-  it('Unit Test - DUnitX - Fixture', function (done) {
+  it('generates a DUnitX Unit Test with a Fixture class', function (done) {
     this.timeout(10000);
 
     helpers.run(path.join(__dirname, '../generators/app'))
