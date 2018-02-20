@@ -27,9 +27,23 @@ describe('Test Delphi Generator - Application', function () {
         projectName: 'testAppConsole'
       }) // Mock the prompt answers
       .toPromise().then(function () {
+        var expected = {
+          "projectName": "testAppConsole.dpr",
+          "sanitizedProjectName": "testAppConsole"
+        }
         try {
           assert.file(['testAppConsole.dpr', 'testAppConsole.dproj']);
-          done();
+          // done();
+          // check dproj (xml) file contents
+          var parser = new xml2js.Parser();
+          fs.readFile('testAppConsole.dproj', function(err, data) {
+              parser.parseString(data, function (err, result) {
+                assert.equal(result.Project.PropertyGroup[0].MainSource[0], expected.projectName);
+                assert.equal(result.Project.PropertyGroup[7].SanitizedProjectName[0], expected.sanitizedProjectName);
+                assert.equal(result.Project.ProjectExtensions[0].BorlandProject[0]["Delphi.Personality"][0].Source[0].Source[0]["_"], expected.projectName);
+                done();
+              });
+          });
         } catch (e) {
           done(e);
         }
@@ -128,10 +142,10 @@ describe('Test Delphi Generator - Package', function () {
                 assert.equal(result.Project.PropertyGroup[7].RuntimeOnlyPackage[0], expected.projectPackageUsageOptions);
                 assert.equal(result.Project.PropertyGroup[7].DCC_OutputNeverBuildDcps[0], expected.projectPackageBuildControl);
                 assert.equal(result.Project.PropertyGroup[11].DCC_Description[0], expected.projectPackageDescription);
+                done();
               });
           });
 
-          done();
         } catch (e) {
           done(e);
         }
