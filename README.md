@@ -2,7 +2,8 @@
 > Yeoman generator for Delphi projects
 
 [![NPM version](https://badge.fury.io/js/generator-delphi.svg)](https://npmjs.org/package/generator-delphi)
-[![build status](https://travis-ci.org/alefragnani/delphi-generator-delphi.svg?branch=master)](https://travis-ci.org/alefragnani/delphi-generator-delphi)
+[![travis build status](https://travis-ci.org/alefragnani/delphi-generator-delphi.svg?branch=master)](https://travis-ci.org/alefragnani/delphi-generator-delphi)
+[![appveyor build status](https://ci.appveyor.com/api/projects/status/h3n8cjd03eyr4529/branch/master?svg=true)](https://ci.appveyor.com/project/alefragnani/delphi-generator-delphi)
 
 ```
 yo delphi
