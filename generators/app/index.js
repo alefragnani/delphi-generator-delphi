@@ -469,12 +469,12 @@ module.exports = Generator.extend({
         debugLog(this, 'to: ' + path.join(context.configOnConstructor.projectName, 'ConsoleApp.dpr'));
 
         this.fs.copyTpl(
-            this.templatePath('application\\console\\ConsoleApp.dpr'),
+            this.templatePath('application/console/ConsoleApp.dpr'),
             this.destinationPath(path.join(context.configOnConstructor.projectName, context.configOnConstructor.projectName + '.dpr')),
             { name: context.configOnConstructor.projectName }
         );
         this.fs.copyTpl(
-            this.templatePath('application\\console\\ConsoleApp.dproj'),
+            this.templatePath('application/console/ConsoleApp.dproj'),
             this.destinationPath(path.join(context.configOnConstructor.projectName, context.configOnConstructor.projectName + '.dproj')),
             { name: context.configOnConstructor.projectName }
         );
@@ -516,25 +516,25 @@ module.exports = Generator.extend({
         }
 
         this.fs.copyTpl(
-            this.templatePath('application\\vcl\\VCLFormsApp.dpr'),
+            this.templatePath('application/vcl/VCLFormsApp.dpr'),
             this.destinationPath(path.join(context.configOnConstructor.projectName, context.configOnConstructor.projectName + '.dpr')),
             { name: context.configOnConstructor.projectName,
             vclstyleactive: translateVCLStyleActive(context.configOnConstructor.projectApplicationVCLStylesActive),
             vclstyleselected: translateVCLStyleSelected(context.configOnConstructor.projectApplicationVCLSylesSelected, true)}
         );
         this.fs.copyTpl(
-            this.templatePath('application\\vcl\\VCLFormsApp.dproj'),
+            this.templatePath('application/vcl/VCLFormsApp.dproj'),
             this.destinationPath(path.join(context.configOnConstructor.projectName, context.configOnConstructor.projectName + '.dproj')),
             { name: context.configOnConstructor.projectName,
             vclstyleselected: translateVCLStyleSelected(context.configOnConstructor.projectApplicationVCLSylesSelected, false)}
         );
         this.fs.copyTpl(
-            this.templatePath('application\\vcl\\uFmMain.pas'),
+            this.templatePath('application/vcl/uFmMain.pas'),
             this.destinationPath(path.join(context.configOnConstructor.projectName, 'uFmMain.pas')),
             { name: context.configOnConstructor.projectName }
         );
         this.fs.copyTpl(
-            this.templatePath('application\\vcl\\uFmMain.dfm'),
+            this.templatePath('application/vcl/uFmMain.dfm'),
             this.destinationPath(path.join(context.configOnConstructor.projectName, 'uFmMain.dfm')),
             { name: context.configOnConstructor.projectName }
         );
@@ -556,22 +556,22 @@ module.exports = Generator.extend({
         }
 
         this.fs.copyTpl(
-            this.templatePath('application\\firemonkey\\FireMonkeyApp.dpr'),
+            this.templatePath('application/firemonkey/FireMonkeyApp.dpr'),
             this.destinationPath(path.join(context.configOnConstructor.projectName, context.configOnConstructor.projectName + '.dpr')),
             { name: context.configOnConstructor.projectName }
         );
         this.fs.copyTpl(
-            this.templatePath('application\\firemonkey\\FireMonkeyApp.dproj'),
+            this.templatePath('application/firemonkey/FireMonkeyApp.dproj'),
             this.destinationPath(path.join(context.configOnConstructor.projectName, context.configOnConstructor.projectName + '.dproj')),
             { name: context.configOnConstructor.projectName }
         );
         this.fs.copyTpl(
-            this.templatePath('application\\firemonkey\\uFmMain.pas'),
+            this.templatePath('application/firemonkey/uFmMain.pas'),
             this.destinationPath(path.join(context.configOnConstructor.projectName, 'uFmMain.pas')),
             { name: context.configOnConstructor.projectName }
         );
         this.fs.copyTpl(
-            this.templatePath('application\\firemonkey\\uFmMain.fmx'),
+            this.templatePath('application/firemonkey/uFmMain.fmx'),
             this.destinationPath(path.join(context.configOnConstructor.projectName, 'uFmMain.fmx')),
             { name: context.configOnConstructor.projectName }
         );
@@ -630,7 +630,7 @@ module.exports = Generator.extend({
         }
         
         this.fs.copyTpl(
-            this.templatePath('package\\Package.dpk'),
+            this.templatePath('package/Package.dpk'),
             this.destinationPath(path.join(context.configOnConstructor.projectName, context.configOnConstructor.projectName + '.dpk')),
             { name: context.configOnConstructor.projectName,
             description: context.configOnConstructor.projectPackageDescription,
@@ -638,7 +638,7 @@ module.exports = Generator.extend({
             buildcontrol: translateBuildControl(context.configOnConstructor.projectPackageBuildControl, true) }
         );
         this.fs.copyTpl(
-            this.templatePath('package\\Package.dproj'),
+            this.templatePath('package/Package.dproj'),
             this.destinationPath(path.join(context.configOnConstructor.projectName, context.configOnConstructor.projectName + '.dproj')),
             { name: context.configOnConstructor.projectName,
             description: context.configOnConstructor.projectPackageDescription,
@@ -659,13 +659,13 @@ module.exports = Generator.extend({
         // debugLog(this, 'to: ' + path.join(context.configOnConstructor.projectName, 'ConsoleApp.dpr'));
 
         this.fs.copyTpl(
-            this.templatePath('unit_test\\console\\ConsoleApp.dpr'),
+            this.templatePath('unit_test/console/ConsoleApp.dpr'),
             this.destinationPath(path.join(context.configOnConstructor.projectName + 'Tests', context.configOnConstructor.projectName + 'Tests.dpr')),
             { name: context.configOnConstructor.projectName, 
             projectUnitTestRunnerType: context.configOnConstructor.projectUnitTestRunnerType }
         );
         this.fs.copyTpl(
-            this.templatePath('unit_test\\console\\ConsoleApp.dproj'),
+            this.templatePath('unit_test/console/ConsoleApp.dproj'),
             this.destinationPath(path.join(context.configOnConstructor.projectName + 'Tests', context.configOnConstructor.projectName + 'Tests.dproj')),
             { name: context.configOnConstructor.projectName, 
             projectUnitTestRunnerType: context.configOnConstructor.projectUnitTestRunnerType }
@@ -775,7 +775,7 @@ module.exports = Generator.extend({
         }        
 
         this.fs.copyTpl(
-            this.templatePath('unit_test\\dunitx\\DUnitXAppTests.dpr'),
+            this.templatePath('unit_test/dunitx/DUnitXAppTests.dpr'),
             this.destinationPath(path.join(context.configOnConstructor.projectName + 'Tests', context.configOnConstructor.projectName + 'Tests.dpr')),
             { name: context.configOnConstructor.projectName, 
             usesRunner: translateUsesRunner(context.configOnConstructor.projectUnitTestDUnitXLoggerNUnit),
@@ -784,14 +784,14 @@ module.exports = Generator.extend({
             instantiateRunner: translateInstantiateRunner(context.configOnConstructor.projectUnitTestDUnitXLoggerNUnit) }
         );
         this.fs.copyTpl(
-            this.templatePath('unit_test\\dunitx\\DUnitXAppTests.dproj'),
+            this.templatePath('unit_test/dunitx/DUnitXAppTests.dproj'),
             this.destinationPath(path.join(context.configOnConstructor.projectName + 'Tests', context.configOnConstructor.projectName + 'Tests.dproj')),
             { name: context.configOnConstructor.projectName, 
             dccReferenceFixture: translateReferenceFixture(context.configOnConstructor.projectUnitTestDUnitXFixtureName) }
         );
         if (context.configOnConstructor.projectUnitTestDUnitXCreateTestUnit) {
             this.fs.copyTpl(
-                this.templatePath('unit_test\\dunitx\\NewTestFixture.pas'),
+                this.templatePath('unit_test/dunitx/NewTestFixture.pas'),
                 this.destinationPath(path.join(context.configOnConstructor.projectName + 'Tests', context.configOnConstructor.projectUnitTestDUnitXFixtureName + '.pas')),
                 {
                     name: context.configOnConstructor.projectUnitTestDUnitXFixtureName,
