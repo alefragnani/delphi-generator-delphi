@@ -61,9 +61,24 @@ describe('Test Delphi Generator - Application', function () {
         projectName: 'testAppVCLFormsNoStyles'
       }) // Mock the prompt answers
       .toPromise().then(function () {
+        var expected = {
+          "projectName": "testAppVCLFormsNoStyles.dpr",
+          "sanitizedProjectName": "testAppVCLFormsNoStyles",
+          "selectedStyle": undefined
+        }
         try {
           assert.file(['testAppVCLFormsNoStyles.dpr', 'testAppVCLFormsNoStyles.dproj', 'uFmMain.pas', 'uFmMain.dfm']);
-          done();
+          // check dproj (xml) file contents
+          var parser = new xml2js.Parser();
+          fs.readFile('testAppVCLFormsNoStyles.dproj', function(err, data) {
+              parser.parseString(data, function (err, result) {
+                assert.equal(result.Project.PropertyGroup[0].MainSource[0], expected.projectName);
+                assert.equal(result.Project.PropertyGroup[7].SanitizedProjectName[0], expected.sanitizedProjectName);
+                assert.equal(result.Project.PropertyGroup[7].Custom_Styles, expected.selectedStyle);
+                assert.equal(result.Project.ProjectExtensions[0].BorlandProject[0]["Delphi.Personality"][0].Source[0].Source[0]["_"], expected.projectName);
+                done();
+              });
+          });
         } catch (e) {
           done(e);
         }
@@ -78,12 +93,28 @@ describe('Test Delphi Generator - Application', function () {
         projectType: 'Application',
         projectApplicationType: 'VCL Forms',
         projectApplicationVCLStylesActive: true,
+        projectApplicationVCLSylesSelected: "Amakrits",
         projectName: 'testAppVCLFormsStyles'
       }) // Mock the prompt answers
       .toPromise().then(function () {
+        var expected = {
+          "projectName": "testAppVCLFormsStyles.dpr",
+          "sanitizedProjectName": "testAppVCLFormsStyles",
+          "selectedStyle": "\"Amakrits|VCLSTYLE|$(BDSCOMMONDIR)\\Styles\\Amakrits.vsf\""
+        }
         try {
           assert.file(['testAppVCLFormsStyles.dpr', 'testAppVCLFormsStyles.dproj', 'uFmMain.pas', 'uFmMain.dfm']);
-          done();
+          // check dproj (xml) file contents
+          var parser = new xml2js.Parser();
+          fs.readFile('testAppVCLFormsStyles.dproj', function(err, data) {
+              parser.parseString(data, function (err, result) {
+                assert.equal(result.Project.PropertyGroup[0].MainSource[0], expected.projectName);
+                assert.equal(result.Project.PropertyGroup[7].SanitizedProjectName[0], expected.sanitizedProjectName);
+                assert.equal(result.Project.PropertyGroup[7].Custom_Styles[0], expected.selectedStyle);
+                assert.equal(result.Project.ProjectExtensions[0].BorlandProject[0]["Delphi.Personality"][0].Source[0].Source[0]["_"], expected.projectName);
+                done();
+              });
+          });
         } catch (e) {
           done(e);
         }
