@@ -131,9 +131,22 @@ describe('Test Delphi Generator - Application', function () {
         projectName: 'testAppFireMonkey'
       }) // Mock the prompt answers
       .toPromise().then(function () {
+        var expected = {
+          "projectName": "testAppFireMonkey.dpr",
+          "sanitizedProjectName": "testAppFireMonkey"
+        }
         try {
           assert.file(['testAppFireMonkey.dpr', 'testAppFireMonkey.dproj', 'uFmMain.pas', 'uFmMain.fmx']);
-          done();
+          // check dproj (xml) file contents
+          var parser = new xml2js.Parser();
+          fs.readFile('testAppFireMonkey.dproj', function(err, data) {
+              parser.parseString(data, function (err, result) {
+                assert.equal(result.Project.PropertyGroup[0].MainSource[0], expected.projectName);
+                assert.equal(result.Project.PropertyGroup[7].SanitizedProjectName[0], expected.sanitizedProjectName);
+                assert.equal(result.Project.ProjectExtensions[0].BorlandProject[0]["Delphi.Personality"][0].Source[0].Source[0]["_"], expected.projectName);
+                done();
+              });
+          });
         } catch (e) {
           done(e);
         }
