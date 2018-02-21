@@ -421,8 +421,57 @@ module.exports = Generator.extend({
                 this.configOnConstructor.projectName = answers.projectName;
                 this.configOnConstructor.projectSimpleUnitInterfaceInherits = answers.projectSimpleUnitInterfaceInherits;
 
-                debugLog(this, this.configOnConstructor.projectSimpleUnitInterfaceName);
+                debugLog(this, this.configOnConstructor.projectName);
                 debugLog(this, this.configOnConstructor.projectSimpleUnitInterfaceInherits);
+            });
+        },
+
+
+        askForProjectSimpleUnitClass: function () {
+
+            if (this.configOnConstructor.projectType !== 'Simple Unit') {
+                debugLog(this, 'left projectType !== Simple Unit');
+                return;
+            }
+
+            if (this.configOnConstructor.projectSimpleUnitType !== 'Class') {
+                debugLog(this, 'left projectSimpleUnitType !== Class');
+                return;
+            }
+
+            return this.prompt([{
+                type: 'input',
+                name: 'projectName',
+                message: 'What\'s the name of your class',
+                default: 'NewClass',
+                validate: function(value) {
+                    return isValidProjectName(value)
+                }
+            },{
+                type: 'input',
+                name: 'projectSimpleUnitClassInherits',
+                message: 'What\'s the name of the base class (left empty if does not inherits from any)',
+                default: '',
+                validate: function(value) {
+                    return isValidProjectName(value)
+                }
+            },{
+                type: 'input',
+                name: 'projectSimpleUnitClassImplements',
+                message: 'What\'s the name of the interface that it implements (left empty if does not inherits from any)',
+                default: '',
+                validate: function(value) {
+                    return isValidProjectName(value)
+                }
+            }]).then((answers) => {
+                //this.log('Choose only one.... (projectApplicationType)....: ', answers.projectApplicationType);
+                this.configOnConstructor.projectName = answers.projectName;
+                this.configOnConstructor.projectSimpleUnitClassInherits = answers.projectSimpleUnitClassInherits;
+                this.configOnConstructor.projectSimpleUnitClassImplements = answers.projectSimpleUnitClassImplements;
+
+                debugLog(this, this.configOnConstructor.projectName);
+                debugLog(this, this.configOnConstructor.projectSimpleUnitClassInherits);
+                debugLog(this, this.configOnConstructor.projectSimpleUnitClassImplements);
             });
         },
 
@@ -521,7 +570,7 @@ module.exports = Generator.extend({
                         this._writingSimpleUnitInterface();
                         break;
                     case 'Class':
-                        // this._writingUnitTestDUnitX();
+                        this._writingSimpleUnitClass();
                         break;
                     // case 'GUI':
                     //     this._writingUnitTestGUI();
@@ -913,6 +962,35 @@ module.exports = Generator.extend({
             { name: context.configOnConstructor.projectName, 
                 inherits: translateInterfaceInherits(context.configOnConstructor.projectSimpleUnitInterfaceInherits),
                 guid: newGUID() }
+        );
+    },
+    
+    _writingSimpleUnitClass: function () {
+
+        var context = this;
+
+        // debugLog(this, '_writingSimpleUnitInterface ' + context.configOnConstructor.projectName);
+        // debugLog(this, '_writingSimpleUnitInterface ' + this.configOnConstructor.projectName);
+
+        // debugLog(this, 'from: ' + path.join(context.configOnConstructor.projectType, 'ConsoleApp.dpr'));
+        // debugLog(this, 'to: ' + path.join(context.configOnConstructor.projectName, 'ConsoleApp.dpr'));
+
+        function translateClassInheritsImplements(inheritsFrom, implementsFrom) {
+            if (!inheritsFrom && !implementsFrom) {
+                return "";
+            } else {
+                var realClass = !inheritsFrom && implementsFrom ? "TInterfacedObject" : inheritsFrom;
+                var sep = realClass && implementsFrom ? ", " : "";
+                return "(" + realClass + sep + implementsFrom + ")";
+            }
+        }
+
+        this.fs.copyTpl(
+            this.templatePath('simple_unit/uClass.pas'),
+            this.destinationPath(context.configOnConstructor.projectName + '.pas'),
+            { name: context.configOnConstructor.projectName, 
+                inheritsImplements: translateClassInheritsImplements(context.configOnConstructor.projectSimpleUnitClassInherits,
+                    context.configOnConstructor.projectSimpleUnitClassImplements) }
         );
     },
     
