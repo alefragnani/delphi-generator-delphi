@@ -35,7 +35,10 @@
     "@types/mocha": "^2.2.0",
     "yeoman-test": "^1.6.0",
     "yeoman-assert": "^2.2.1",
-    "xml2js": "^0.4.19"
+    "xml2js": "^0.4.19",
+    "gulp": "^3.9.1",
+    "gulp-mocha": "^5.0.0",
+    "gulp-istanbul": "^1.1.3"
   },
   "scripts": {
     "prepublishOnly": "npm test",
