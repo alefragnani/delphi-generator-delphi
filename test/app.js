@@ -36,13 +36,13 @@ describe('Test Delphi Generator - Application', function () {
           // done();
           // check dproj (xml) file contents
           var parser = new xml2js.Parser();
-          fs.readFile('testAppConsole.dproj', function(err, data) {
-              parser.parseString(data, function (err, result) {
-                assert.equal(result.Project.PropertyGroup[0].MainSource[0], expected.projectName);
-                assert.equal(result.Project.PropertyGroup[7].SanitizedProjectName[0], expected.sanitizedProjectName);
-                assert.equal(result.Project.ProjectExtensions[0].BorlandProject[0]["Delphi.Personality"][0].Source[0].Source[0]["_"], expected.projectName);
-                done();
-              });
+          fs.readFile('testAppConsole.dproj', function (err, data) {
+            parser.parseString(data, function (err, result) {
+              assert.equal(result.Project.PropertyGroup[0].MainSource[0], expected.projectName);
+              assert.equal(result.Project.PropertyGroup[7].SanitizedProjectName[0], expected.sanitizedProjectName);
+              assert.equal(result.Project.ProjectExtensions[0].BorlandProject[0]["Delphi.Personality"][0].Source[0].Source[0]["_"], expected.projectName);
+              done();
+            });
           });
         } catch (e) {
           done(e);
@@ -70,14 +70,14 @@ describe('Test Delphi Generator - Application', function () {
           assert.file(['testAppVCLFormsNoStyles.dpr', 'testAppVCLFormsNoStyles.dproj', 'uFmMain.pas', 'uFmMain.dfm']);
           // check dproj (xml) file contents
           var parser = new xml2js.Parser();
-          fs.readFile('testAppVCLFormsNoStyles.dproj', function(err, data) {
-              parser.parseString(data, function (err, result) {
-                assert.equal(result.Project.PropertyGroup[0].MainSource[0], expected.projectName);
-                assert.equal(result.Project.PropertyGroup[7].SanitizedProjectName[0], expected.sanitizedProjectName);
-                assert.equal(result.Project.PropertyGroup[7].Custom_Styles, expected.selectedStyle);
-                assert.equal(result.Project.ProjectExtensions[0].BorlandProject[0]["Delphi.Personality"][0].Source[0].Source[0]["_"], expected.projectName);
-                done();
-              });
+          fs.readFile('testAppVCLFormsNoStyles.dproj', function (err, data) {
+            parser.parseString(data, function (err, result) {
+              assert.equal(result.Project.PropertyGroup[0].MainSource[0], expected.projectName);
+              assert.equal(result.Project.PropertyGroup[7].SanitizedProjectName[0], expected.sanitizedProjectName);
+              assert.equal(result.Project.PropertyGroup[7].Custom_Styles, expected.selectedStyle);
+              assert.equal(result.Project.ProjectExtensions[0].BorlandProject[0]["Delphi.Personality"][0].Source[0].Source[0]["_"], expected.projectName);
+              done();
+            });
           });
         } catch (e) {
           done(e);
@@ -106,14 +106,14 @@ describe('Test Delphi Generator - Application', function () {
           assert.file(['testAppVCLFormsStyles.dpr', 'testAppVCLFormsStyles.dproj', 'uFmMain.pas', 'uFmMain.dfm']);
           // check dproj (xml) file contents
           var parser = new xml2js.Parser();
-          fs.readFile('testAppVCLFormsStyles.dproj', function(err, data) {
-              parser.parseString(data, function (err, result) {
-                assert.equal(result.Project.PropertyGroup[0].MainSource[0], expected.projectName);
-                assert.equal(result.Project.PropertyGroup[7].SanitizedProjectName[0], expected.sanitizedProjectName);
-                assert.equal(result.Project.PropertyGroup[7].Custom_Styles[0], expected.selectedStyle);
-                assert.equal(result.Project.ProjectExtensions[0].BorlandProject[0]["Delphi.Personality"][0].Source[0].Source[0]["_"], expected.projectName);
-                done();
-              });
+          fs.readFile('testAppVCLFormsStyles.dproj', function (err, data) {
+            parser.parseString(data, function (err, result) {
+              assert.equal(result.Project.PropertyGroup[0].MainSource[0], expected.projectName);
+              assert.equal(result.Project.PropertyGroup[7].SanitizedProjectName[0], expected.sanitizedProjectName);
+              assert.equal(result.Project.PropertyGroup[7].Custom_Styles[0], expected.selectedStyle);
+              assert.equal(result.Project.ProjectExtensions[0].BorlandProject[0]["Delphi.Personality"][0].Source[0].Source[0]["_"], expected.projectName);
+              done();
+            });
           });
         } catch (e) {
           done(e);
@@ -139,13 +139,13 @@ describe('Test Delphi Generator - Application', function () {
           assert.file(['testAppFireMonkey.dpr', 'testAppFireMonkey.dproj', 'uFmMain.pas', 'uFmMain.fmx']);
           // check dproj (xml) file contents
           var parser = new xml2js.Parser();
-          fs.readFile('testAppFireMonkey.dproj', function(err, data) {
-              parser.parseString(data, function (err, result) {
-                assert.equal(result.Project.PropertyGroup[0].MainSource[0], expected.projectName);
-                assert.equal(result.Project.PropertyGroup[7].SanitizedProjectName[0], expected.sanitizedProjectName);
-                assert.equal(result.Project.ProjectExtensions[0].BorlandProject[0]["Delphi.Personality"][0].Source[0].Source[0]["_"], expected.projectName);
-                done();
-              });
+          fs.readFile('testAppFireMonkey.dproj', function (err, data) {
+            parser.parseString(data, function (err, result) {
+              assert.equal(result.Project.PropertyGroup[0].MainSource[0], expected.projectName);
+              assert.equal(result.Project.PropertyGroup[7].SanitizedProjectName[0], expected.sanitizedProjectName);
+              assert.equal(result.Project.ProjectExtensions[0].BorlandProject[0]["Delphi.Personality"][0].Source[0].Source[0]["_"], expected.projectName);
+              done();
+            });
           });
         } catch (e) {
           done(e);
@@ -180,14 +180,14 @@ describe('Test Delphi Generator - Package', function () {
 
           // check dproj (xml) file contents
           var parser = new xml2js.Parser();
-          fs.readFile('testPackage.dproj', function(err, data) {
-              parser.parseString(data, function (err, result) {
-                assert.equal(result.Project.PropertyGroup[7].SanitizedProjectName[0], expected.projectName);
-                assert.equal(result.Project.PropertyGroup[7].RuntimeOnlyPackage[0], expected.projectPackageUsageOptions);
-                assert.equal(result.Project.PropertyGroup[7].DCC_OutputNeverBuildDcps[0], expected.projectPackageBuildControl);
-                assert.equal(result.Project.PropertyGroup[11].DCC_Description[0], expected.projectPackageDescription);
-                done();
-              });
+          fs.readFile('testPackage.dproj', function (err, data) {
+            parser.parseString(data, function (err, result) {
+              assert.equal(result.Project.PropertyGroup[7].SanitizedProjectName[0], expected.projectName);
+              assert.equal(result.Project.PropertyGroup[7].RuntimeOnlyPackage[0], expected.projectPackageUsageOptions);
+              assert.equal(result.Project.PropertyGroup[7].DCC_OutputNeverBuildDcps[0], expected.projectPackageBuildControl);
+              assert.equal(result.Project.PropertyGroup[11].DCC_Description[0], expected.projectPackageDescription);
+              done();
+            });
           });
 
         } catch (e) {
@@ -218,14 +218,14 @@ describe('Test Delphi Generator - Package', function () {
 
           // check dproj (xml) file contents
           var parser = new xml2js.Parser();
-          fs.readFile('testPackage.dproj', function(err, data) {
-              parser.parseString(data, function (err, result) {
-                assert.equal(result.Project.PropertyGroup[7].SanitizedProjectName[0], expected.projectName);
-                assert.equal(result.Project.PropertyGroup[7].DesignOnlyPackage[0], expected.projectPackageUsageOptions);
-                assert.equal(result.Project.PropertyGroup[7].DCC_OutputNeverBuildDcps, expected.projectPackageBuildControl);
-                assert.equal(result.Project.PropertyGroup[11].DCC_Description[0], expected.projectPackageDescription);
-                done();
-              });
+          fs.readFile('testPackage.dproj', function (err, data) {
+            parser.parseString(data, function (err, result) {
+              assert.equal(result.Project.PropertyGroup[7].SanitizedProjectName[0], expected.projectName);
+              assert.equal(result.Project.PropertyGroup[7].DesignOnlyPackage[0], expected.projectPackageUsageOptions);
+              assert.equal(result.Project.PropertyGroup[7].DCC_OutputNeverBuildDcps, expected.projectPackageBuildControl);
+              assert.equal(result.Project.PropertyGroup[11].DCC_Description[0], expected.projectPackageDescription);
+              done();
+            });
           });
 
         } catch (e) {
@@ -258,13 +258,13 @@ describe('Test Delphi Generator - Unit Test', function () {
 
           // check dproj (xml) file contents
           var parser = new xml2js.Parser();
-          fs.readFile('testDUnitTests.dproj', function(err, data) {
-              parser.parseString(data, function (err, result) {
-                assert.equal(result.Project.PropertyGroup[0].MainSource[0], expected.projectName);
-                assert.equal(result.Project.PropertyGroup[7].SanitizedProjectName[0], expected.sanitizedProjectName);
-                assert.equal(result.Project.ProjectExtensions[0].BorlandProject[0]["Delphi.Personality"][0].Source[0].Source[0]["_"], expected.projectName);
-                done();
-              });
+          fs.readFile('testDUnitTests.dproj', function (err, data) {
+            parser.parseString(data, function (err, result) {
+              assert.equal(result.Project.PropertyGroup[0].MainSource[0], expected.projectName);
+              assert.equal(result.Project.PropertyGroup[7].SanitizedProjectName[0], expected.sanitizedProjectName);
+              assert.equal(result.Project.ProjectExtensions[0].BorlandProject[0]["Delphi.Personality"][0].Source[0].Source[0]["_"], expected.projectName);
+              done();
+            });
           });
         } catch (e) {
           done(e);
@@ -291,13 +291,13 @@ describe('Test Delphi Generator - Unit Test', function () {
           assert.file(['testDUnitTests.dpr', 'testDUnitTests.dproj']);
           // check dproj (xml) file contents
           var parser = new xml2js.Parser();
-          fs.readFile('testDUnitTests.dproj', function(err, data) {
-              parser.parseString(data, function (err, result) {
-                assert.equal(result.Project.PropertyGroup[0].MainSource[0], expected.projectName);
-                assert.equal(result.Project.PropertyGroup[7].SanitizedProjectName[0], expected.sanitizedProjectName);
-                assert.equal(result.Project.ProjectExtensions[0].BorlandProject[0]["Delphi.Personality"][0].Source[0].Source[0]["_"], expected.projectName);
-                done();
-              });
+          fs.readFile('testDUnitTests.dproj', function (err, data) {
+            parser.parseString(data, function (err, result) {
+              assert.equal(result.Project.PropertyGroup[0].MainSource[0], expected.projectName);
+              assert.equal(result.Project.PropertyGroup[7].SanitizedProjectName[0], expected.sanitizedProjectName);
+              assert.equal(result.Project.ProjectExtensions[0].BorlandProject[0]["Delphi.Personality"][0].Source[0].Source[0]["_"], expected.projectName);
+              done();
+            });
           });
         } catch (e) {
           done(e);
@@ -325,14 +325,14 @@ describe('Test Delphi Generator - Unit Test', function () {
           assert.file(['testDUnitXTests.dpr', 'testDUnitXTests.dproj']);
           // check dproj (xml) file contents
           var parser = new xml2js.Parser();
-          fs.readFile('testDUnitXTests.dproj', function(err, data) {
-              parser.parseString(data, function (err, result) {
-                assert.equal(result.Project.PropertyGroup[0].MainSource[0], expected.projectName);
-                assert.equal(result.Project.PropertyGroup[6].SanitizedProjectName[0], expected.sanitizedProjectName);
-                assert.equal(result.Project.ItemGroup[0].DCCReference, expected.fixtureName);
-                assert.equal(result.Project.ProjectExtensions[0].BorlandProject[0]["Delphi.Personality"][0].Source[0].Source[0]["_"], expected.projectName);
-                done();
-              });
+          fs.readFile('testDUnitXTests.dproj', function (err, data) {
+            parser.parseString(data, function (err, result) {
+              assert.equal(result.Project.PropertyGroup[0].MainSource[0], expected.projectName);
+              assert.equal(result.Project.PropertyGroup[6].SanitizedProjectName[0], expected.sanitizedProjectName);
+              assert.equal(result.Project.ItemGroup[0].DCCReference, expected.fixtureName);
+              assert.equal(result.Project.ProjectExtensions[0].BorlandProject[0]["Delphi.Personality"][0].Source[0].Source[0]["_"], expected.projectName);
+              done();
+            });
           });
         } catch (e) {
           done(e);
@@ -362,14 +362,14 @@ describe('Test Delphi Generator - Unit Test', function () {
           assert.file(['testDUnitXTests.dpr', 'testDUnitXTests.dproj', 'testDUnitXFixture.pas']);
           // check dproj (xml) file contents
           var parser = new xml2js.Parser();
-          fs.readFile('testDUnitXTests.dproj', function(err, data) {
-              parser.parseString(data, function (err, result) {
-                assert.equal(result.Project.PropertyGroup[0].MainSource[0], expected.projectName);
-                assert.equal(result.Project.PropertyGroup[6].SanitizedProjectName[0], expected.sanitizedProjectName);
-                assert.equal(result.Project.ItemGroup[0].DCCReference[0]["$"].Include, expected.fixtureName);
-                assert.equal(result.Project.ProjectExtensions[0].BorlandProject[0]["Delphi.Personality"][0].Source[0].Source[0]["_"], expected.projectName);
-                done();
-              });
+          fs.readFile('testDUnitXTests.dproj', function (err, data) {
+            parser.parseString(data, function (err, result) {
+              assert.equal(result.Project.PropertyGroup[0].MainSource[0], expected.projectName);
+              assert.equal(result.Project.PropertyGroup[6].SanitizedProjectName[0], expected.sanitizedProjectName);
+              assert.equal(result.Project.ItemGroup[0].DCCReference[0]["$"].Include, expected.fixtureName);
+              assert.equal(result.Project.ProjectExtensions[0].BorlandProject[0]["Delphi.Personality"][0].Source[0].Source[0]["_"], expected.projectName);
+              done();
+            });
           });
         } catch (e) {
           done(e);
@@ -408,12 +408,12 @@ describe('Test Delphi Generator - Simple Unit', function () {
           done(e);
         }
       });
-    });
-    
-    it('Generates an Interface Unit with inheritance', function (done) {
-      this.timeout(10000);
-      
-      helpers.run(path.join(__dirname, '../generators/app'))
+  });
+
+  it('Generates an Interface Unit with inheritance', function (done) {
+    this.timeout(10000);
+
+    helpers.run(path.join(__dirname, '../generators/app'))
       .withPrompts({
         projectType: 'Simple Unit',
         projectName: 'testInterface',
@@ -427,13 +427,13 @@ describe('Test Delphi Generator - Simple Unit', function () {
         }
         try {
           assert.file(['testInterface.pas']);
-          
+
           // check pas file contents
           var file = fs.readFileSync('testInterface.pas', 'utf8');
           var lines = file.split('\n');
-          
+
           assert.equal(lines[0], 'unit ' + expected.projectName + ';\r');
-          assert.equal(lines[5], '  I' + expected.projectName + ' = interface(' + expected.projectSimpleUnitInterfaceInherits+ ')\r');
+          assert.equal(lines[5], '  I' + expected.projectName + ' = interface(' + expected.projectSimpleUnitInterfaceInherits + ')\r');
           assert.notEqual(lines[6], '');
           done();
         } catch (e) {
@@ -441,6 +441,139 @@ describe('Test Delphi Generator - Simple Unit', function () {
         }
       });
   });
-  
+
+  it('Generates a Class Unit with no inheritance', function (done) {
+    this.timeout(10000);
+
+    helpers.run(path.join(__dirname, '../generators/app'))
+      .withPrompts({
+        projectType: 'Simple Unit',
+        projectName: 'testClass',
+        projectSimpleUnitType: 'Class',
+        projectSimpleUnitClassInherits: undefined,
+        projectSimpleUnitClassImplements: undefined
+      }) // Mock the prompt answers
+      .toPromise().then(function () {
+        var expected = {
+          "projectName": "testClass"
+        }
+        try {
+          assert.file(['testClass.pas']);
+
+          // check pas file contents
+          var file = fs.readFileSync('testClass.pas', 'utf8');
+          var lines = file.split('\n');
+
+          assert.equal(lines[0], 'unit ' + expected.projectName + ';\r');
+          assert.equal(lines[5], '  T' + expected.projectName + ' = class\r');
+          done();
+        } catch (e) {
+          done(e);
+        }
+      });
+  });
+
+  it('Generates a Class Unit with inheritance', function (done) {
+    this.timeout(10000);
+
+    helpers.run(path.join(__dirname, '../generators/app'))
+      .withPrompts({
+        projectType: 'Simple Unit',
+        projectName: 'testClass',
+        projectSimpleUnitType: 'Class',
+        projectSimpleUnitClassInherits: 'TSampleBaseClass',
+        projectSimpleUnitClassImplements: undefined
+      }) // Mock the prompt answers
+      .toPromise().then(function () {
+        var expected = {
+          "projectName": "testClass",
+          "projectSimpleUnitClassInherits": "TSampleBaseClass"
+        }
+        try {
+          assert.file(['testClass.pas']);
+
+          // check pas file contents
+          var file = fs.readFileSync('testClass.pas', 'utf8');
+          var lines = file.split('\n');
+
+          assert.equal(lines[0], 'unit ' + expected.projectName + ';\r');
+          assert.equal(lines[5], '  T' + expected.projectName + ' = class(' + expected.projectSimpleUnitClassInherits + ')\r');
+          done();
+        } catch (e) {
+          done(e);
+        }
+      });
+  });
+
+  it('Generates a Class Unit with inheritance and implementing interface', function (done) {
+    this.timeout(10000);
+
+    helpers.run(path.join(__dirname, '../generators/app'))
+      .withPrompts({
+        projectType: 'Simple Unit',
+        projectName: 'testClass',
+        projectSimpleUnitType: 'Class',
+        projectSimpleUnitClassInherits: 'TSampleBaseClass',
+        projectSimpleUnitClassImplements: 'ISampleInterface'
+      }) // Mock the prompt answers
+      .toPromise().then(function () {
+        var expected = {
+          "projectName": "testClass",
+          "projectSimpleUnitClassInherits": "TSampleBaseClass",
+          "projectSimpleUnitClassImplements": "ISampleInterface"
+        }
+        try {
+          assert.file(['testClass.pas']);
+
+          // check pas file contents
+          var file = fs.readFileSync('testClass.pas', 'utf8');
+          var lines = file.split('\n');
+
+          assert.equal(lines[0], 'unit ' + expected.projectName + ';\r');
+          assert.equal(lines[5], '  T' + expected.projectName + ' = class(' + 
+            expected.projectSimpleUnitClassInherits + ', ' +
+            expected.projectSimpleUnitClassImplements + ')\r');
+          done();
+        } catch (e) {
+          done(e);
+        }
+      });      
+    });
+    
+  it('Generates a Class Unit with no inheritance but implementing interface', function (done) {
+    this.timeout(10000);
+
+    helpers.run(path.join(__dirname, '../generators/app'))
+      .withPrompts({
+        projectType: 'Simple Unit',
+        projectName: 'testClass',
+        projectSimpleUnitType: 'Class',
+        projectSimpleUnitClassInherits: undefined,
+        projectSimpleUnitClassImplements: 'ISampleInterface'
+      }) // Mock the prompt answers
+      .toPromise().then(function () {
+        var expected = {
+          "projectName": "testClass",
+          "projectSimpleUnitClassInherits": "TInterfacedObject",
+          "projectSimpleUnitClassImplements": "ISampleInterface"
+        }
+        try {
+          assert.file(['testClass.pas']);
+
+          // check pas file contents
+          var file = fs.readFileSync('testClass.pas', 'utf8');
+          var lines = file.split('\n');
+
+          assert.equal(lines[0], 'unit ' + expected.projectName + ';\r');
+          assert.equal(lines[5], '  T' + expected.projectName + ' = class(' + 
+            expected.projectSimpleUnitClassInherits + ', ' +
+            expected.projectSimpleUnitClassImplements + ')\r');
+          done();
+        } catch (e) {
+          done(e);
+        }
+      });
+  });
+
 });
 
