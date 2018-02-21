@@ -235,6 +235,7 @@ describe('Test Delphi Generator - Package', function () {
   });
 
 });
+
 describe('Test Delphi Generator - Unit Test', function () {
 
   it('Generates a DUnit Unit Test using a Text runner', function (done) {
@@ -375,5 +376,71 @@ describe('Test Delphi Generator - Unit Test', function () {
         }
       });
   });
-
 });
+
+describe('Test Delphi Generator - Simple Unit', function () {
+
+  it('Generates an Interface Unit with no inheritance', function (done) {
+    this.timeout(10000);
+
+    helpers.run(path.join(__dirname, '../generators/app'))
+      .withPrompts({
+        projectType: 'Simple Unit',
+        projectName: 'testInterface',
+        projectSimpleUnitType: 'Interface'
+      }) // Mock the prompt answers
+      .toPromise().then(function () {
+        var expected = {
+          "projectName": "testInterface"
+        }
+        try {
+          assert.file(['testInterface.pas']);
+
+          // check pas file contents
+          var file = fs.readFileSync('testInterface.pas', 'utf8');
+          var lines = file.split('\n');
+
+          assert.equal(lines[0], 'unit ' + expected.projectName + ';\r');
+          assert.equal(lines[5], '  I' + expected.projectName + ' = interface\r');
+          assert.notEqual(lines[6], '');
+          done();
+        } catch (e) {
+          done(e);
+        }
+      });
+    });
+    
+    it('Generates an Interface Unit with inheritance', function (done) {
+      this.timeout(10000);
+      
+      helpers.run(path.join(__dirname, '../generators/app'))
+      .withPrompts({
+        projectType: 'Simple Unit',
+        projectName: 'testInterface',
+        projectSimpleUnitType: 'Interface',
+        projectSimpleUnitInterfaceInherits: 'ISampleBaseInterface'
+      }) // Mock the prompt answers
+      .toPromise().then(function () {
+        var expected = {
+          "projectName": "testInterface",
+          "projectSimpleUnitInterfaceInherits": "ISampleBaseInterface"
+        }
+        try {
+          assert.file(['testInterface.pas']);
+          
+          // check pas file contents
+          var file = fs.readFileSync('testInterface.pas', 'utf8');
+          var lines = file.split('\n');
+          
+          assert.equal(lines[0], 'unit ' + expected.projectName + ';\r');
+          assert.equal(lines[5], '  I' + expected.projectName + ' = interface(' + expected.projectSimpleUnitInterfaceInherits+ ')\r');
+          assert.notEqual(lines[6], '');
+          done();
+        } catch (e) {
+          done(e);
+        }
+      });
+  });
+  
+});
+
