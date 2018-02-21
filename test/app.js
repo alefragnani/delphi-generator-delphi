@@ -562,12 +562,12 @@ describe('Test Delphi Generator - Simple Unit', function () {
 
           // check pas file contents
           var file = fs.readFileSync('testClass.pas', 'utf8');
-          var lines = file.split('\n');
+          var lines = file.split('\r\n');
 
-          assert.equal(lines[0], 'unit ' + expected.projectName + ';\r');
+          assert.equal(lines[0], 'unit ' + expected.projectName + ';');
           assert.equal(lines[5], '  T' + expected.projectName + ' = class(' + 
             expected.projectSimpleUnitClassInherits + ', ' +
-            expected.projectSimpleUnitClassImplements + ')\r');
+            expected.projectSimpleUnitClassImplements + ')');
           done();
         } catch (e) {
           done(e);
