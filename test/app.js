@@ -400,8 +400,8 @@ describe('Test Delphi Generator - Simple Unit', function () {
           var file = fs.readFileSync('testInterface.pas', 'utf8');
           var lines = file.split('\n');
 
-          assert.equal(lines[0], 'unit ' + expected.projectName + ';\r');
-          assert.equal(lines[5], '  I' + expected.projectName + ' = interface\r');
+          assert.equal(lines[0].replace(/(\n|\r)/g, ''), 'unit ' + expected.projectName + ';');
+          assert.equal(lines[5].replace(/(\n|\r)/g, ''), '  I' + expected.projectName + ' = interface');
           assert.notEqual(lines[6], '');
           done();
         } catch (e) {
@@ -432,8 +432,8 @@ describe('Test Delphi Generator - Simple Unit', function () {
           var file = fs.readFileSync('testInterface.pas', 'utf8');
           var lines = file.split('\n');
 
-          assert.equal(lines[0], 'unit ' + expected.projectName + ';\r');
-          assert.equal(lines[5], '  I' + expected.projectName + ' = interface(' + expected.projectSimpleUnitInterfaceInherits + ')\r');
+          assert.equal(lines[0].replace(/(\n|\r)/g, ''), 'unit ' + expected.projectName + ';');
+          assert.equal(lines[5].replace(/(\n|\r)/g, ''), '  I' + expected.projectName + ' = interface(' + expected.projectSimpleUnitInterfaceInherits + ')');
           assert.notEqual(lines[6], '');
           done();
         } catch (e) {
@@ -464,8 +464,8 @@ describe('Test Delphi Generator - Simple Unit', function () {
           var file = fs.readFileSync('testClass.pas', 'utf8');
           var lines = file.split('\n');
 
-          assert.equal(lines[0], 'unit ' + expected.projectName + ';\r');
-          assert.equal(lines[5], '  T' + expected.projectName + ' = class\r');
+          assert.equal(lines[0].replace(/(\n|\r)/g, ''), 'unit ' + expected.projectName + ';');
+          assert.equal(lines[5].replace(/(\n|\r)/g, ''), '  T' + expected.projectName + ' = class');
           done();
         } catch (e) {
           done(e);
@@ -496,8 +496,8 @@ describe('Test Delphi Generator - Simple Unit', function () {
           var file = fs.readFileSync('testClass.pas', 'utf8');
           var lines = file.split('\n');
 
-          assert.equal(lines[0], 'unit ' + expected.projectName + ';\r');
-          assert.equal(lines[5], '  T' + expected.projectName + ' = class(' + expected.projectSimpleUnitClassInherits + ')\r');
+          assert.equal(lines[0].replace(/(\n|\r)/g, ''), 'unit ' + expected.projectName + ';');
+          assert.equal(lines[5].replace(/(\n|\r)/g, ''), '  T' + expected.projectName + ' = class(' + expected.projectSimpleUnitClassInherits + ')');
           done();
         } catch (e) {
           done(e);
@@ -529,10 +529,10 @@ describe('Test Delphi Generator - Simple Unit', function () {
           var file = fs.readFileSync('testClass.pas', 'utf8');
           var lines = file.split('\n');
 
-          assert.equal(lines[0], 'unit ' + expected.projectName + ';\r');
-          assert.equal(lines[5], '  T' + expected.projectName + ' = class(' + 
+          assert.equal(lines[0].replace(/(\n|\r)/g, ''), 'unit ' + expected.projectName + ';');
+          assert.equal(lines[5].replace(/(\n|\r)/g, ''), '  T' + expected.projectName + ' = class(' + 
             expected.projectSimpleUnitClassInherits + ', ' +
-            expected.projectSimpleUnitClassImplements + ')\r');
+            expected.projectSimpleUnitClassImplements + ')');
           done();
         } catch (e) {
           done(e);
