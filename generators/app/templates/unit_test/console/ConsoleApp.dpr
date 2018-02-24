@@ -7,7 +7,7 @@ program <%= name %>Tests;
 uses
   System.SysUtils,
   TestFrameWork,
-  <%= projectUnitTestRunnerType %>TestRunner;  
+  <%= projectUnitTestRunnerType %>TestRunner;
 
 begin
   <%= projectUnitTestRunnerType %>TestRunner.RunRegisteredTests;
