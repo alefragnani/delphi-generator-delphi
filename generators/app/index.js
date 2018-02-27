@@ -379,7 +379,7 @@ module.exports = Generator.extend({
                 type: 'list',
                 name: 'projectSimpleUnitType',
                 message: 'Choose the Unit Type',
-                choices: ['Interface', 'Class', 'Frame', 'Form'],
+                choices: ['Interface', 'Class'/*, 'Frame', 'Form'*/],
                 default: 'Interface'
             }]).then((answers) => {
                 //this.log('Choose only one.... (projectApplicationType)....: ', answers.projectApplicationType);
