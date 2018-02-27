@@ -19,7 +19,7 @@ gulp.task('test', function (cb) {
 });
 
 gulp.task('watch', function () {
-  gulp.watch(['generators/**/*.js', 'test/**'], ['test']);
+  gulp.watch(['generators/**/*.js', 'test/**', 'generators/app/templates/**'], ['test']);
 });
 
 gulp.task('default', ['test']);

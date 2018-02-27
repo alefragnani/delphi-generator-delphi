@@ -3,6 +3,7 @@ var Generator = require('yeoman-generator');
 var chalk = require('chalk');
 var yosay = require('yosay');
 var path = require("path");
+const uuidv4 = require('uuid/v4');
 
 var DEBUG_MODE = false;
 function debugLog(athis, message) {
@@ -47,8 +48,8 @@ module.exports = Generator.extend({
                 type: 'list',
                 name: 'projectType',
                 message: 'Choose the Project Type',
-                choices: ['Application', 'Package', 'Unit Test'],
-                default: 'Application'
+                choices: ['New Application', 'New Package', 'New Unit Test', 'New Unit'],
+                default: 'New Application'
             }]).then((answers) => {
                 this.configOnConstructor.projectType = answers.projectType;
             });
@@ -56,7 +57,7 @@ module.exports = Generator.extend({
 
         askForProjectApplicationType: function () {
 
-            if (this.configOnConstructor.projectType !== 'Application') {
+            if (this.configOnConstructor.projectType !== 'New Application') {
                 // debugLog(this, 'left projectType');
                 return;
             }
@@ -75,7 +76,7 @@ module.exports = Generator.extend({
 
         askForProjectApplicationVCLStylesActive: function () {
 
-            if (this.configOnConstructor.projectType !== 'Application') {
+            if (this.configOnConstructor.projectType !== 'New Application') {
                 //debugLog(this, 'left projectType');
                 return;
             }
@@ -96,7 +97,7 @@ module.exports = Generator.extend({
 
         askForProjectApplicationVCLSylesSelected: function () {
 
-            if (this.configOnConstructor.projectType !== 'Application') {
+            if (this.configOnConstructor.projectType !== 'New Application') {
                 debugLog(this, 'left projectType !== Application');
                 return;
             }
@@ -129,7 +130,7 @@ module.exports = Generator.extend({
 
         askForProjectName: function () {
 
-            if (this.configOnConstructor.projectType !== 'Application') {
+            if (this.configOnConstructor.projectType !== 'New Application') {
                 debugLog(this, 'left projectType !== Application');
                 return;
             }
@@ -152,7 +153,7 @@ module.exports = Generator.extend({
         // PACKAGE
         askForProjectPackageDetails: function () {
 
-            if (this.configOnConstructor.projectType !== 'Package') {
+            if (this.configOnConstructor.projectType !== 'New Package') {
                 debugLog(this, 'left projectType !== Package');
                 return;
             }
@@ -206,7 +207,7 @@ module.exports = Generator.extend({
         // UNIT TEST
         askForProjectUnitTestType: function () {
 
-            if (this.configOnConstructor.projectType !== 'Unit Test') {
+            if (this.configOnConstructor.projectType !== 'New Unit Test') {
                 // debugLog(this, 'left projectType');
                 return;
             }
@@ -226,7 +227,7 @@ module.exports = Generator.extend({
         // UNIT TEST
         askForProjectUnitTestName: function () {
 
-            if (this.configOnConstructor.projectType !== 'Unit Test') {
+            if (this.configOnConstructor.projectType !== 'New Unit Test') {
                 debugLog(this, 'left projectType !== Unit Test');
                 return;
             }
@@ -367,9 +368,121 @@ module.exports = Generator.extend({
             });
         },
 
+        askForProjectSimpleUnit: function () {
+
+            if (this.configOnConstructor.projectType !== 'New Unit') {
+                debugLog(this, 'left projectType !== Simple Unit');
+                return;
+            }
+
+            return this.prompt([{
+                type: 'list',
+                name: 'projectSimpleUnitType',
+                message: 'Choose the Unit Type',
+                choices: ['Interface', 'Class'/*, 'Frame', 'Form'*/],
+                default: 'Interface'
+            }]).then((answers) => {
+                //this.log('Choose only one.... (projectApplicationType)....: ', answers.projectApplicationType);
+                this.configOnConstructor.projectSimpleUnitType = answers.projectSimpleUnitType;
+                debugLog(this, this.configOnConstructor.projectSimpleUnitType);
+            });
+        },
+
+        askForProjectSimpleUnitInterface: function () {
+
+            if (this.configOnConstructor.projectType !== 'New Unit') {
+                debugLog(this, 'left projectType !== Simple Unit');
+                return;
+            }
+
+            if (this.configOnConstructor.projectSimpleUnitType !== 'Interface') {
+                debugLog(this, 'left projectSimpleUnitType !== Interface');
+                return;
+            }
+
+            return this.prompt([{
+                type: 'input',
+                name: 'projectName',
+                message: 'What\'s the name of your interface',
+                default: 'NewInterface',
+                validate: function(value) {
+                    return isValidProjectName(value)
+                }
+            },{
+                type: 'input',
+                name: 'projectSimpleUnitInterfaceInherits',
+                message: 'What\'s the name of the base interface (left empty if does not inherits from any)',
+                default: '',
+                validate: function(value) {
+                    return isValidProjectName(value)
+                }
+            }]).then((answers) => {
+                //this.log('Choose only one.... (projectApplicationType)....: ', answers.projectApplicationType);
+                this.configOnConstructor.projectName = answers.projectName;
+                this.configOnConstructor.projectSimpleUnitInterfaceInherits = answers.projectSimpleUnitInterfaceInherits;
+
+                debugLog(this, this.configOnConstructor.projectName);
+                debugLog(this, this.configOnConstructor.projectSimpleUnitInterfaceInherits);
+            });
+        },
+
+
+        askForProjectSimpleUnitClass: function () {
+
+            if (this.configOnConstructor.projectType !== 'New Unit') {
+                debugLog(this, 'left projectType !== Simple Unit');
+                return;
+            }
+
+            if (this.configOnConstructor.projectSimpleUnitType !== 'Class') {
+                debugLog(this, 'left projectSimpleUnitType !== Class');
+                return;
+            }
+
+            return this.prompt([{
+                type: 'input',
+                name: 'projectName',
+                message: 'What\'s the name of your class',
+                default: 'NewClass',
+                validate: function(value) {
+                    return isValidProjectName(value)
+                }
+            },{
+                type: 'input',
+                name: 'projectSimpleUnitClassInherits',
+                message: 'What\'s the name of the base class (left empty if does not inherits from any)',
+                default: '',
+                validate: function(value) {
+                    return isValidProjectName(value)
+                }
+            },{
+                type: 'input',
+                name: 'projectSimpleUnitClassImplements',
+                message: 'What\'s the name of the interface that it implements (left empty if does not inherits from any)',
+                default: '',
+                validate: function(value) {
+                    return isValidProjectName(value)
+                }
+            }]).then((answers) => {
+                //this.log('Choose only one.... (projectApplicationType)....: ', answers.projectApplicationType);
+                this.configOnConstructor.projectName = answers.projectName;
+                this.configOnConstructor.projectSimpleUnitClassInherits = answers.projectSimpleUnitClassInherits;
+                this.configOnConstructor.projectSimpleUnitClassImplements = answers.projectSimpleUnitClassImplements;
+
+                debugLog(this, this.configOnConstructor.projectName);
+                debugLog(this, this.configOnConstructor.projectSimpleUnitClassInherits);
+                debugLog(this, this.configOnConstructor.projectSimpleUnitClassImplements);
+            });
+        },
+
 
         // GIT
         askForGit: function () {
+
+            if (this.configOnConstructor.projectType == 'New Unit') {
+                debugLog(this, 'left projectType == Simple Unit');
+                return;
+            }
 
             return this.prompt({
                 type: 'confirm',
@@ -409,15 +522,15 @@ module.exports = Generator.extend({
         debugLog(this, 'configOnConstructor.projectUnitTestDUnitXCreateTestUnit: ' + this.configOnConstructor.projectUnitTestDUnitXCreateTestUnit);
 
         this.configOnConstructor.projectNameWithExtension = this.configOnConstructor.projectName +
-          (this.configOnConstructor.projectType === 'Unit Test' ? 'Tests' : '') +
-          (this.configOnConstructor.projectType === 'Package' ? '.dpk' : '.dpr');
+          (this.configOnConstructor.projectType === 'New Unit Test' ? 'Tests' : '') +
+          (this.configOnConstructor.projectType === 'New Package' ? '.dpk' : '.dpr');
 
 
         // this.log('writing:....')
         // this.sourceRoot(path.join(__dirname, './templates/' + this.projectConfig.type));
 
         switch (this.configOnConstructor.projectType) {
-            case 'Application':
+            case 'New Application':
                 switch (this.configOnConstructor.projectApplicationType) {
                     case 'Console':
                         this._writingApplicationConsole();
@@ -433,16 +546,31 @@ module.exports = Generator.extend({
                         break;                          
                 }
                 break;
-            case 'Package':
+            case 'New Package':
                 this._writingPackage();
                 break;
-            case 'Unit Test':
+            case 'New Unit Test':
                 switch (this.configOnConstructor.projectUnitTestType) {
                     case 'DUnit':
                         this._writingUnitTestConsole();
                         break;
                     case 'DUnitX':
                         this._writingUnitTestDUnitX();
+                        break;
+                    // case 'GUI':
+                    //     this._writingUnitTestGUI();
+                    //     break;
+                    default:
+                        break;
+                }
+                break;
+            case 'New Unit':
+                switch (this.configOnConstructor.projectSimpleUnitType) {
+                    case 'Interface':
+                        this._writingSimpleUnitInterface();
+                        break;
+                    case 'Class':
+                        this._writingSimpleUnitClass();
                         break;
                     // case 'GUI':
                     //     this._writingUnitTestGUI();
@@ -806,6 +934,66 @@ module.exports = Generator.extend({
         this.configOnConstructor.projectName = context.configOnConstructor.projectName + 'Tests';
     },
 
+    _writingSimpleUnitInterface: function () {
+
+        var context = this;
+
+        // debugLog(this, '_writingSimpleUnitInterface ' + context.configOnConstructor.projectName);
+        // debugLog(this, '_writingSimpleUnitInterface ' + this.configOnConstructor.projectName);
+
+        // debugLog(this, 'from: ' + path.join(context.configOnConstructor.projectType, 'ConsoleApp.dpr'));
+        // debugLog(this, 'to: ' + path.join(context.configOnConstructor.projectName, 'ConsoleApp.dpr'));
+
+        function translateInterfaceInherits(inherits) {
+            if (!inherits) {
+                return "";
+            } else {
+                return "(" + inherits + ")";
+            }
+        }
+
+        function newGUID() {
+            return "[\'{" + uuidv4().toUpperCase() + "}\']";
+        }
+
+        this.fs.copyTpl(
+            this.templatePath('simple_unit/uInterface.pas'),
+            this.destinationPath(context.configOnConstructor.projectName + '.pas'),
+            { name: context.configOnConstructor.projectName, 
+                inherits: translateInterfaceInherits(context.configOnConstructor.projectSimpleUnitInterfaceInherits),
+                guid: newGUID() }
+        );
+    },
+    
+    _writingSimpleUnitClass: function () {
+
+        var context = this;
+
+        // debugLog(this, '_writingSimpleUnitInterface ' + context.configOnConstructor.projectName);
+        // debugLog(this, '_writingSimpleUnitInterface ' + this.configOnConstructor.projectName);
+
+        // debugLog(this, 'from: ' + path.join(context.configOnConstructor.projectType, 'ConsoleApp.dpr'));
+        // debugLog(this, 'to: ' + path.join(context.configOnConstructor.projectName, 'ConsoleApp.dpr'));
+
+        function translateClassInheritsImplements(inheritsFrom, implementsFrom) {
+            if (!inheritsFrom && !implementsFrom) {
+                return "";
+            } else {
+                var realClass = !inheritsFrom && implementsFrom ? "TInterfacedObject" : inheritsFrom;
+                var sep = realClass && implementsFrom ? ", " : "";
+                return "(" + realClass + sep + implementsFrom + ")";
+            }
+        }
+
+        this.fs.copyTpl(
+            this.templatePath('simple_unit/uClass.pas'),
+            this.destinationPath(context.configOnConstructor.projectName + '.pas'),
+            { name: context.configOnConstructor.projectName, 
+                inheritsImplements: translateClassInheritsImplements(context.configOnConstructor.projectSimpleUnitClassInherits,
+                    context.configOnConstructor.projectSimpleUnitClassImplements) }
+        );
+    },
+    
     // _writingUnitTestGUI: function () {
 
     //     var context = this;
@@ -845,11 +1033,13 @@ module.exports = Generator.extend({
         this.log('');
         this.log('Your project ' + chalk.bold(this.configOnConstructor.projectName) + ' has been created!');
         this.log('');
-        this.log('To start editing with ' + chalk.bold('Delphi') + ', use the following commands:');
-        this.log('');
-        this.log(chalk.cyan('     cd ' + this.configOnConstructor.projectName));
-        this.log(chalk.cyan('     bds ' + this.configOnConstructor.projectNameWithExtension));
-        this.log('');
+        if (this.configOnConstructor.projectType !== 'New Unit') {
+            this.log('To start editing with ' + chalk.bold('Delphi') + ', use the following commands:');
+            this.log('');
+            this.log(chalk.cyan('     cd ' + this.configOnConstructor.projectName));
+            this.log(chalk.cyan('     bds ' + this.configOnConstructor.projectNameWithExtension));
+            this.log('');
+        }
         this.log('For more information, also visit ' + chalk.underline.blue('http://www.github.com/alefragnani/vscode-generator-delphi') + 
           ' and follow us ' + chalk.underline.blue('@alefragnani') + '.');
         this.log('\r\n');
