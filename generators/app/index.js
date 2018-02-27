@@ -5,7 +5,7 @@ var yosay = require('yosay');
 var path = require("path");
 const uuidv4 = require('uuid/v4');
 
-var DEBUG_MODE = true;
+var DEBUG_MODE = false;
 function debugLog(athis, message) {
     if (DEBUG_MODE) {
         athis.log(message)
@@ -48,8 +48,8 @@ module.exports = Generator.extend({
                 type: 'list',
                 name: 'projectType',
                 message: 'Choose the Project Type',
-                choices: ['Application', 'Package', 'Unit Test', 'Simple Unit'],
-                default: 'Application'
+                choices: ['New Application', 'New Package', 'New Unit Test', 'New Unit'],
+                default: 'New Application'
             }]).then((answers) => {
                 this.configOnConstructor.projectType = answers.projectType;
             });
@@ -57,7 +57,7 @@ module.exports = Generator.extend({
 
         askForProjectApplicationType: function () {
 
-            if (this.configOnConstructor.projectType !== 'Application') {
+            if (this.configOnConstructor.projectType !== 'New Application') {
                 // debugLog(this, 'left projectType');
                 return;
             }
@@ -76,7 +76,7 @@ module.exports = Generator.extend({
 
         askForProjectApplicationVCLStylesActive: function () {
 
-            if (this.configOnConstructor.projectType !== 'Application') {
+            if (this.configOnConstructor.projectType !== 'New Application') {
                 //debugLog(this, 'left projectType');
                 return;
             }
@@ -97,7 +97,7 @@ module.exports = Generator.extend({
 
         askForProjectApplicationVCLSylesSelected: function () {
 
-            if (this.configOnConstructor.projectType !== 'Application') {
+            if (this.configOnConstructor.projectType !== 'New Application') {
                 debugLog(this, 'left projectType !== Application');
                 return;
             }
@@ -130,7 +130,7 @@ module.exports = Generator.extend({
 
         askForProjectName: function () {
 
-            if (this.configOnConstructor.projectType !== 'Application') {
+            if (this.configOnConstructor.projectType !== 'New Application') {
                 debugLog(this, 'left projectType !== Application');
                 return;
             }
@@ -153,7 +153,7 @@ module.exports = Generator.extend({
         // PACKAGE
         askForProjectPackageDetails: function () {
 
-            if (this.configOnConstructor.projectType !== 'Package') {
+            if (this.configOnConstructor.projectType !== 'New Package') {
                 debugLog(this, 'left projectType !== Package');
                 return;
             }
@@ -207,7 +207,7 @@ module.exports = Generator.extend({
         // UNIT TEST
         askForProjectUnitTestType: function () {
 
-            if (this.configOnConstructor.projectType !== 'Unit Test') {
+            if (this.configOnConstructor.projectType !== 'New Unit Test') {
                 // debugLog(this, 'left projectType');
                 return;
             }
@@ -227,7 +227,7 @@ module.exports = Generator.extend({
         // UNIT TEST
         askForProjectUnitTestName: function () {
 
-            if (this.configOnConstructor.projectType !== 'Unit Test') {
+            if (this.configOnConstructor.projectType !== 'New Unit Test') {
                 debugLog(this, 'left projectType !== Unit Test');
                 return;
             }
@@ -370,7 +370,7 @@ module.exports = Generator.extend({
 
         askForProjectSimpleUnit: function () {
 
-            if (this.configOnConstructor.projectType !== 'Simple Unit') {
+            if (this.configOnConstructor.projectType !== 'New Unit') {
                 debugLog(this, 'left projectType !== Simple Unit');
                 return;
             }
@@ -390,7 +390,7 @@ module.exports = Generator.extend({
 
         askForProjectSimpleUnitInterface: function () {
 
-            if (this.configOnConstructor.projectType !== 'Simple Unit') {
+            if (this.configOnConstructor.projectType !== 'New Unit') {
                 debugLog(this, 'left projectType !== Simple Unit');
                 return;
             }
@@ -429,7 +429,7 @@ module.exports = Generator.extend({
 
         askForProjectSimpleUnitClass: function () {
 
-            if (this.configOnConstructor.projectType !== 'Simple Unit') {
+            if (this.configOnConstructor.projectType !== 'New Unit') {
                 debugLog(this, 'left projectType !== Simple Unit');
                 return;
             }
@@ -479,7 +479,7 @@ module.exports = Generator.extend({
         // GIT
         askForGit: function () {
 
-            if (this.configOnConstructor.projectType == 'Simple Unit') {
+            if (this.configOnConstructor.projectType == 'New Unit') {
                 debugLog(this, 'left projectType == Simple Unit');
                 return;
             }
@@ -522,15 +522,15 @@ module.exports = Generator.extend({
         debugLog(this, 'configOnConstructor.projectUnitTestDUnitXCreateTestUnit: ' + this.configOnConstructor.projectUnitTestDUnitXCreateTestUnit);
 
         this.configOnConstructor.projectNameWithExtension = this.configOnConstructor.projectName +
-          (this.configOnConstructor.projectType === 'Unit Test' ? 'Tests' : '') +
-          (this.configOnConstructor.projectType === 'Package' ? '.dpk' : '.dpr');
+          (this.configOnConstructor.projectType === 'New Unit Test' ? 'Tests' : '') +
+          (this.configOnConstructor.projectType === 'New Package' ? '.dpk' : '.dpr');
 
 
         // this.log('writing:....')
         // this.sourceRoot(path.join(__dirname, './templates/' + this.projectConfig.type));
 
         switch (this.configOnConstructor.projectType) {
-            case 'Application':
+            case 'New Application':
                 switch (this.configOnConstructor.projectApplicationType) {
                     case 'Console':
                         this._writingApplicationConsole();
@@ -546,10 +546,10 @@ module.exports = Generator.extend({
                         break;                          
                 }
                 break;
-            case 'Package':
+            case 'New Package':
                 this._writingPackage();
                 break;
-            case 'Unit Test':
+            case 'New Unit Test':
                 switch (this.configOnConstructor.projectUnitTestType) {
                     case 'DUnit':
                         this._writingUnitTestConsole();
@@ -564,7 +564,7 @@ module.exports = Generator.extend({
                         break;
                 }
                 break;
-            case 'Simple Unit':
+            case 'New Unit':
                 switch (this.configOnConstructor.projectSimpleUnitType) {
                     case 'Interface':
                         this._writingSimpleUnitInterface();
@@ -1033,7 +1033,7 @@ module.exports = Generator.extend({
         this.log('');
         this.log('Your project ' + chalk.bold(this.configOnConstructor.projectName) + ' has been created!');
         this.log('');
-        if (this.configOnConstructor.projectType !== 'Simple Unit') {
+        if (this.configOnConstructor.projectType !== 'New Unit') {
             this.log('To start editing with ' + chalk.bold('Delphi') + ', use the following commands:');
             this.log('');
             this.log(chalk.cyan('     cd ' + this.configOnConstructor.projectName));

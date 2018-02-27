@@ -26,7 +26,7 @@ describe('Test Delphi Generator - Application', function () {
 
     helpers.run(path.join(__dirname, '../generators/app'))
       .withPrompts({
-        projectType: 'Application',
+        projectType: 'New Application',
         projectApplicationType: 'Console',
         projectName: 'testAppConsole'
       }) // Mock the prompt answers
@@ -64,7 +64,7 @@ describe('Test Delphi Generator - Application', function () {
 
     helpers.run(path.join(__dirname, '../generators/app'))
       .withPrompts({
-        projectType: 'Application',
+        projectType: 'New Application',
         projectApplicationType: 'VCL Forms',
         projectApplicationVCLStylesActive: false,
         projectName: 'testAppVCLFormsNoStyles'
@@ -109,7 +109,7 @@ describe('Test Delphi Generator - Application', function () {
 
     helpers.run(path.join(__dirname, '../generators/app'))
       .withPrompts({
-        projectType: 'Application',
+        projectType: 'New Application',
         projectApplicationType: 'VCL Forms',
         projectApplicationVCLStylesActive: true,
         projectApplicationVCLSylesSelected: "Amakrits",
@@ -155,7 +155,7 @@ describe('Test Delphi Generator - Application', function () {
 
     helpers.run(path.join(__dirname, '../generators/app'))
       .withPrompts({
-        projectType: 'Application',
+        projectType: 'New Application',
         projectApplicationType: 'FireMonkey',
         projectName: 'testAppFireMonkey'
       }) // Mock the prompt answers
@@ -197,7 +197,7 @@ describe('Test Delphi Generator - Package', function () {
 
     helpers.run(path.join(__dirname, '../generators/app'))
       .withPrompts({
-        projectType: 'Package',
+        projectType: 'New Package',
         projectName: 'testPackage',
         projectPackageDescription: 'Test Package',
         projectPackageUsageOptions: 'Runtime',
@@ -245,7 +245,7 @@ describe('Test Delphi Generator - Package', function () {
 
     helpers.run(path.join(__dirname, '../generators/app'))
       .withPrompts({
-        projectType: 'Package',
+        projectType: 'New Package',
         projectName: 'testPackage',
         projectPackageDescription: 'Test Package',
         projectPackageUsageOptions: 'Designtime',
@@ -298,7 +298,7 @@ describe('Test Delphi Generator - Unit Test', function () {
 
     helpers.run(path.join(__dirname, '../generators/app'))
       .withPrompts({
-        projectType: 'Unit Test',
+        projectType: 'New Unit Test',
         projectUnitTestType: 'DUnit',
         projectName: 'testDUnit',
         projectUnitTestRunnerType: 'Text'
@@ -341,7 +341,7 @@ describe('Test Delphi Generator - Unit Test', function () {
 
     helpers.run(path.join(__dirname, '../generators/app'))
       .withPrompts({
-        projectType: 'Unit Test',
+        projectType: 'New Unit Test',
         projectUnitTestType: 'DUnit',
         projectName: 'testDUnit',
         projectUnitTestRunnerType: 'XML'
@@ -384,7 +384,7 @@ describe('Test Delphi Generator - Unit Test', function () {
 
     helpers.run(path.join(__dirname, '../generators/app'))
       .withPrompts({
-        projectType: 'Unit Test',
+        projectType: 'New Unit Test',
         projectUnitTestType: 'DUnitX',
         projectName: 'testDUnitX',
         projectUnitTestDUnitXLoggerNUnit: false,
@@ -435,7 +435,7 @@ describe('Test Delphi Generator - Unit Test', function () {
 
     helpers.run(path.join(__dirname, '../generators/app'))
       .withPrompts({
-        projectType: 'Unit Test',
+        projectType: 'New Unit Test',
         projectUnitTestType: 'DUnitX',
         projectName: 'testDUnitX',
         projectUnitTestDUnitXLoggerNUnit: false,
@@ -488,7 +488,7 @@ describe('Test Delphi Generator - Unit Test', function () {
 
     helpers.run(path.join(__dirname, '../generators/app'))
       .withPrompts({
-        projectType: 'Unit Test',
+        projectType: 'New Unit Test',
         projectUnitTestType: 'DUnitX',
         projectName: 'testDUnitX',
         projectUnitTestDUnitXLoggerNUnit: true,
@@ -610,7 +610,7 @@ describe('Test Delphi Generator - Simple Unit', function () {
 
     helpers.run(path.join(__dirname, '../generators/app'))
       .withPrompts({
-        projectType: 'Simple Unit',
+        projectType: 'New Unit',
         projectName: 'testInterface',
         projectSimpleUnitType: 'Interface'
       }) // Mock the prompt answers
@@ -640,7 +640,7 @@ describe('Test Delphi Generator - Simple Unit', function () {
 
     helpers.run(path.join(__dirname, '../generators/app'))
       .withPrompts({
-        projectType: 'Simple Unit',
+        projectType: 'New Unit',
         projectName: 'testInterface',
         projectSimpleUnitType: 'Interface',
         projectSimpleUnitInterfaceInherits: 'ISampleBaseInterface'
@@ -672,7 +672,7 @@ describe('Test Delphi Generator - Simple Unit', function () {
 
     helpers.run(path.join(__dirname, '../generators/app'))
       .withPrompts({
-        projectType: 'Simple Unit',
+        projectType: 'New Unit',
         projectName: 'testClass',
         projectSimpleUnitType: 'Class',
         projectSimpleUnitClassInherits: undefined,
@@ -703,7 +703,7 @@ describe('Test Delphi Generator - Simple Unit', function () {
 
     helpers.run(path.join(__dirname, '../generators/app'))
       .withPrompts({
-        projectType: 'Simple Unit',
+        projectType: 'New Unit',
         projectName: 'testClass',
         projectSimpleUnitType: 'Class',
         projectSimpleUnitClassInherits: 'TSampleBaseClass',
@@ -735,7 +735,7 @@ describe('Test Delphi Generator - Simple Unit', function () {
 
     helpers.run(path.join(__dirname, '../generators/app'))
       .withPrompts({
-        projectType: 'Simple Unit',
+        projectType: 'New Unit',
         projectName: 'testClass',
         projectSimpleUnitType: 'Class',
         projectSimpleUnitClassInherits: 'TSampleBaseClass',
@@ -770,7 +770,7 @@ describe('Test Delphi Generator - Simple Unit', function () {
 
     helpers.run(path.join(__dirname, '../generators/app'))
       .withPrompts({
-        projectType: 'Simple Unit',
+        projectType: 'New Unit',
         projectName: 'testClass',
         projectSimpleUnitType: 'Class',
         projectSimpleUnitClassInherits: undefined,
