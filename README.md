@@ -50,16 +50,28 @@ These are the available projects:
 
 There are some specific options for each kind of project, which you will be able to choose/type while using the generator
 
-## Participate
+## Support Yo Delphi
 
-If you have any idea, feel free to create issues and pull requests
+While **Yo Delphi** is free and open source, if you find it useful, please consider supporting it.
+
+I've been working on this on my spare time, and I really like it, but I'd willing to do even more.
+
+<table align="center" width="60%" border="0">
+  <tr>
+    <td>
+      <a title="Paypal" href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=EP57F3B6FXKTU&lc=US&item_name=Alessandro%20Fragnani&item_number=delphi&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif"/></a>
+    </td>
+    <td>
+      <a title="Paypal" href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=EP57F3B6FXKTU&lc=BR&item_name=Alessandro%20Fragnani&item_number=delphi&currency_code=BRL&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted"><img src="https://www.paypalobjects.com/pt_BR/i/btn/btn_donate_SM.gif"/></a>
+    </td>
+    <td>
+      <a title="Patreon" href="https://www.patreon.com/alefragnani"><img src="images/become-a-patron-rounded.png"/></a>
+    </td>
+  </tr>
+</table>
+
+---
 
 ## License
 
 MIT © [Alessandro Fragnani](https://www.github.com/alefragnani)
-
----
-
-[![Paypal Donations](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=EP57F3B6FXKTU&lc=US&item_name=Alessandro%20Fragnani&item_number=delphi&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted) a :coffee: and you will help me to keep working on this project :wink:
-
-[![Paypal Donations](https://www.paypalobjects.com/pt_BR/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=EP57F3B6FXKTU&lc=BR&item_name=Alessandro%20Fragnani&item_number=delphi&currency_code=BRL&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted) uma :coffee: e você vai me ajudar a continuar trabalhando neste projeto :wink:
