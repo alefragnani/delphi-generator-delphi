@@ -37,7 +37,7 @@
     "yeoman-test": "^1.6.0",
     "yeoman-assert": "^2.2.1",
     "xml2js": "^0.4.19",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "gulp-mocha": "^5.0.0",
     "gulp-istanbul": "^1.1.3"
   },
