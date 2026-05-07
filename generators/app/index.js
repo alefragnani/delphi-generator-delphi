@@ -3,7 +3,7 @@ var Generator = require('yeoman-generator');
 var chalk = require('chalk');
 var yosay = require('yosay');
 var path = require("path");
-const uuidv4 = require('uuid/v4');
+const { randomUUID } = require('crypto');
 
 var DEBUG_MODE = false;
 function debugLog(athis, message) {
@@ -953,7 +953,7 @@ module.exports = Generator.extend({
         }
 
         function newGUID() {
-            return "[\'{" + uuidv4().toUpperCase() + "}\']";
+            return "[\'{" + randomUUID().toUpperCase() + "}\']";
         }
 
         this.fs.copyTpl(
