@@ -3,7 +3,7 @@ var Generator = require('yeoman-generator');
 var chalk = require('chalk');
 var yosay = require('yosay');
 var path = require("path");
-const uuidv4 = require('uuid/v4');
+const { v4: uuidv4 } = require('uuid');
 
 var DEBUG_MODE = false;
 function debugLog(athis, message) {
