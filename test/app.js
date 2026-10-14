@@ -192,6 +192,23 @@ describe('Test Delphi Generator - Application', function () {
 
 });
 
+describe('Test Delphi Generator - Git init', function () {
+  it('Initializes a git repository in the project folder', function () {
+    this.timeout(10000);
+
+    return helpers.run(path.join(__dirname, '../generators/app'))
+      .withPrompts({
+        projectType: 'New Application',
+        projectApplicationType: 'Console',
+        projectName: 'testAppGit',
+        gitInit: true
+      })
+      .then(function () {
+        assert.file(['testAppGit.dpr', '.git']);
+      });
+  });
+});
+
 describe('Test Delphi Generator - Package', function () {
 
   it('Generates a Runtime package Package with explicit rebuild', function (done) {

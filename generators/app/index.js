@@ -1040,13 +1040,13 @@ export default class extends Generator {
     }
 
     // End
-    end() {
+    async end() {
 
         // Git init
         if (this.configOnConstructor.gitInit) {
             debugLog(this, 'git init: ' + this.configOnConstructor.projectName);
             process.chdir(this.configOnConstructor.projectName);
-            this.spawnCommand('git', ['init', '--quiet']);
+            await this.spawn('git', ['init', '--quiet'], { cwd: process.cwd() });
         }
 
         this.log('');
