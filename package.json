@@ -16,6 +16,9 @@
     "url": "https://github.com/alefragnani/delphi-generator-delphi/issues"
   },
   "license": "MIT",
+  "engines": {
+    "node": "^22.18.0 || >=24.11.0"
+  },
   "files": [
     "generators"
   ],

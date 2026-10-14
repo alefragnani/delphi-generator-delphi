@@ -16,7 +16,7 @@ git clone https://github.com/alefragnani/delphi-generator-delphi.git
 
 Prerequisites
 
-- [Node.js](https://nodejs.org/), `>= 16.13.0`
+- [Node.js](https://nodejs.org/), `^22.18.0 || >=24.11.0`
 
 ### Build
 
