@@ -1,9 +1,11 @@
-'use strict';
-var path = require('path');
-var assert = require('yeoman-assert');
-var helpers = require('yeoman-test');
-var fs = require('fs');
-var xml2js = require('xml2js')
+import path from 'path';
+import assert from 'yeoman-assert';
+import helpers from 'yeoman-test';
+import fs from 'fs';
+import xml2js from 'xml2js';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function removeLineBreaks(text) {
   return text.replace(/(\n|\r)/g, '');
